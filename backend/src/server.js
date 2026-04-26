@@ -2,7 +2,10 @@ const express = require ('express');
 const cors = require ('cors');
 const helmet = require ('helmet');  
 const morgan = require ('morgan');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 require('dotenv').config();
+
 
 const app = express();
 
@@ -12,6 +15,8 @@ app.use (helmet());
 app.use (morgan('dev'));
 app.use (express.json());
 app.use (express.urlencoded({extended: true}));
+// Swagger docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //routes
 app.get('/', (req, res) => {
