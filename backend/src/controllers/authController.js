@@ -45,7 +45,57 @@ const authController = {
       });
     }
   },
+  
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
 
+      if (!email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email and password are required',
+        });
+      }
+
+      const user = await User.findByEmail(email);
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid credentials',
+        });
+      }
+
+      const isMatch = await User.comparePassword(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid credentials',
+        });
+      }
+
+      const token = generateToken(user);
+
+      res.json({
+        success: true,
+        message: 'Login successful',
+        data: {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+          token,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Server error',
+        error: error.message,
+      });
+    }
+  },
   async getMe (req, res) {
     try{
       const user = await User.findById(req.user.id);
