@@ -4,6 +4,8 @@ const helmet = require ('helmet');
 const morgan = require ('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const authRoutes = require('./routes/auth');
+const { createUsersTable } = require('./models/User');
 require('dotenv').config();
 
 
@@ -33,6 +35,7 @@ app.get ('/health', (req,res)=>{
     message: 'Server is running',
   });
 });
+app.use('/api/auth', authRoutes);
 
 //404 handler
 app.use((req, res) =>{
@@ -42,10 +45,15 @@ app.use((req, res) =>{
   });
 });
 
-const PPORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen (PPORT, ()=>{
- console.log (`ShopFlow API is running on port ${PPORT}`);
-});
+const startServer = async () => {
+  await createUsersTable();
+  app.listen(PORT, () => {
+    console.log(` ShopFlow API running on port ${PORT}`);
+  });
+};
+
+startServer();
 
 module.exports = app;
