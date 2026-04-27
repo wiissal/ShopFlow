@@ -91,10 +91,10 @@ router.put('/:id', protect, adminOnly, categoryController.update);
 
 /**
  * @swagger
- * /api/categories/{id}:
- *   delete:
- *     summary: Delete a category (admin only)
- *     tags: [Categories]
+ * /api/products/{id}:
+ *   put:
+ *     summary: Update a product (admin only)
+ *     tags: [Products]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -103,9 +103,28 @@ router.put('/:id', protect, adminOnly, categoryController.update);
  *         required: true
  *         schema:
  *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               stock:
+ *                 type: integer
+ *               image:
+ *                 type: string
+ *               category_id:
+ *                 type: integer
  *     responses:
  *       200:
- *         description: Category deleted
+ *         description: Product updated
  */
 router.delete('/:id', protect, adminOnly, categoryController.delete);
 
