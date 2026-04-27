@@ -1,4 +1,4 @@
-const Pool = require("../config/database");
+const pool = require("../config/database");
 
 const createCategoriesTable = async () => {
   const query = `
