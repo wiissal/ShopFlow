@@ -12,6 +12,8 @@ const { createCategoriesTable } = require("./models/Category");
 const { createProductsTable } = require("./models/Product");
 const orderRoutes = require('./routes/orders');
 const { createOrdersTable } = require('./models/Order');
+const dashboardRoutes = require('./routes/dashboard');
+
 require("dotenv").config();
 
 const app = express();
@@ -44,6 +46,8 @@ app.get("/health", (req, res) => {
 });
 app.use("/api/auth", authRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+
 //404 handler
 app.use((req, res) => {
   res.status(404).json({
