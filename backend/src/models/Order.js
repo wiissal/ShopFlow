@@ -34,16 +34,14 @@ const Order = {
     return result.rows[0];
   },
   async addItems(order_id, items) {
-    const values = items
-      .map(
-        (item) =>
-          `(${order_id}, ${item.product_id}, ${item.quantity}, ${item.price})`,
-      )
-      .join(",");
+  for (const item of items) {
     await pool.query(
-      `INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ${values}`,
+      `INSERT INTO order_items (order_id, product_id, quantity, price)
+       VALUES ($1, $2, $3, $4)`,
+      [order_id, item.product_id, item.quantity, item.price]
     );
-  },
+  }
+},
   async findById(id) {
     const order = await pool.query("SELECT * FROM orders WHERE id = $1", [id]);
 

@@ -17,7 +17,7 @@ const orderController = {
       const ordersItems = [];
 
       for (const item of items) {
-        const product = await Product.findByid(item.product_id);
+        const product = await Product.findById(item.product_id);
         if (!product) {
           return res.status(404).json({
             success: false,
@@ -33,7 +33,7 @@ const orderController = {
         total_amount += product.price * item.quantity;
         ordersItems.push({
           product_id: item.product_id,
-          quatity: item.quatity,
+          quantity: item.quantity,
           price: product.price,
         });
       }
