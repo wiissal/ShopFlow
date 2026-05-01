@@ -10,6 +10,8 @@ const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
 const { createCategoriesTable } = require("./models/Category");
 const { createProductsTable } = require("./models/Product");
+const orderRoutes = require('./routes/orders');
+const { createOrdersTable } = require('./models/Order');
 require("dotenv").config();
 
 const app = express();
@@ -41,7 +43,7 @@ app.get("/health", (req, res) => {
   });
 });
 app.use("/api/auth", authRoutes);
-
+app.use('/api/orders', orderRoutes);
 //404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -56,6 +58,7 @@ const startServer = async () => {
   await createUsersTable();
   await createCategoriesTable();
   await createProductsTable();
+  await createOrdersTable();
   app.listen(PORT, () => {
     console.log(` ShopFlow API running on port ${PORT}`);
   });

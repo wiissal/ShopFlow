@@ -1,4 +1,4 @@
-const pool = require("..config/database");
+const pool = require("../config/database");
 const createOrdersTable = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS orders (
