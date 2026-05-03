@@ -25,7 +25,7 @@ export default function HomePage() {
 
         /* HERO */
         .hero {
-          min-height: 92vh;
+          min-height: 75vh;
           display: grid;
           grid-template-columns: 1fr 1fr;
           align-items: center;
