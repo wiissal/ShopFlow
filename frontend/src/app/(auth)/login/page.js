@@ -1,17 +1,88 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+
+const PARTICLE_COUNT = 60;
+
+function useParticles(canvasRef) {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 0.5,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: (Math.random() - 0.5) * 0.4,
+      opacity: Math.random() * 0.5 + 0.2,
+    }));
+
+    let animId;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 208, 132, ${p.opacity})`;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+
+      // Draw lines between close particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+          if (dist < 80) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 208, 132, ${0.1 * (1 - dist / 80)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(animId);
+  }, [canvasRef]);
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [gradientAngle, setGradientAngle] = useState(135);
+  const canvasRef = useRef(null);
   const { login } = useAuth();
   const router = useRouter();
+
+  useParticles(canvasRef);
+
+  // Gradient shift animation
+  useEffect(() => {
+    let angle = 135;
+    let direction = 1;
+    const interval = setInterval(() => {
+      angle += direction * 0.3;
+      if (angle >= 180) direction = -1;
+      if (angle <= 90) direction = 1;
+      setGradientAngle(angle);
+    }, 30);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,137 +102,188 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', fontFamily: 'Inter, sans-serif' }}>
-      {/* Left Side */}
-      <div style={{
-        flex: 1,
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '60px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Background circles */}
-        <div style={{
-          position: 'absolute', top: '-100px', right: '-100px',
-          width: '400px', height: '400px', borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.05)',
-        }} />
-        <div style={{
-          position: 'absolute', bottom: '-150px', left: '-150px',
-          width: '500px', height: '500px', borderRadius: '50%',
-          border: '1px solid rgba(255,255,255,0.05)',
-        }} />
+    <>
+      <style>{`
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .input-field {
+          width: 100%;
+          padding: 14px 16px;
+          background: #16213e;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px;
+          color: white;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.3s ease;
+        }
+        .input-field:focus {
+          border-color: #00d084;
+          box-shadow: 0 0 0 3px rgba(0,208,132,0.15);
+          background: #1a2744;
+        }
+        .login-btn {
+          width: 100%;
+          padding: 14px;
+          background: #00d084;
+          border: none;
+          border-radius: 10px;
+          color: #1a1a2e;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(0,208,132,0.3);
+        }
+        .login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0,208,132,0.5);
+        }
+        .login-btn:active {
+          transform: translateY(0);
+        }
+        .logo-box {
+          width: 52px; height: 52px;
+          border-radius: 14px;
+          background: #00d084;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 26px;
+          font-weight: bold;
+          color: #1a1a2e;
+          margin-bottom: 16px;
+          box-shadow: 0 0 20px rgba(0,208,132,0.4), 0 0 60px rgba(0,208,132,0.1);
+          animation: glow 3s ease-in-out infinite;
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(0,208,132,0.4), 0 0 60px rgba(0,208,132,0.1); }
+          50% { box-shadow: 0 0 30px rgba(0,208,132,0.7), 0 0 80px rgba(0,208,132,0.2); }
+        }
+        @keyframes fadeInRight {
+          from { opacity: 0; transform: translateX(40px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInLeft {
+          from { opacity: 0; transform: translateX(-40px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .left-side { animation: fadeInLeft 1s ease forwards; }
+        .right-side { animation: fadeInRight 1s ease forwards; }
+      `}</style>
 
-        {/* Logo */}
-        <div style={{ marginBottom: '48px' }}>
-          <div style={{
-            width: '48px', height: '48px', borderRadius: '12px',
-            background: '#00d084', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-            fontSize: '24px', fontWeight: 'bold', color: '#1a1a2e',
-            marginBottom: '16px',
-          }}>S</div>
-          <span style={{ color: 'white', fontSize: '20px', fontWeight: '600' }}>ShopFlow</span>
-        </div>
+      <div style={{ display: 'flex', height: '100vh', fontFamily: 'Inter, sans-serif' }}>
 
-        <h1 style={{ color: 'white', fontSize: '42px', fontWeight: '700', lineHeight: '1.2', marginBottom: '20px' }}>
-          Hello,<br />Welcome! 
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', lineHeight: '1.6', maxWidth: '380px' }}>
-          Manage your store, track orders, and grow your business all in one place.
-        </p>
+        {/* Left Side */}
+        <div className="left-side" style={{
+          flex: 1,
+          background: `linear-gradient(${gradientAngle}deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)`,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: '60px',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Particles canvas */}
+          <canvas ref={canvasRef} style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%', pointerEvents: 'none',
+          }} />
 
-        <div style={{ marginTop: '48px', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
-          © 2026 ShopFlow. All rights reserved.
-        </div>
-      </div>
+          {/* Content */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ marginBottom: '48px' }}>
+              <div className="logo-box">S</div>
+              <span style={{ color: 'white', fontSize: '20px', fontWeight: '600' }}>ShopFlow</span>
+            </div>
 
-      {/* Right Side */}
-      <div style={{
-        flex: 1, background: '#0d0d1a',
-        display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', padding: '60px',
-      }}>
-        <div style={{ maxWidth: '400px', width: '100%' }}>
-          <h2 style={{ color: 'white', fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
-            Welcome Back!
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '32px', fontSize: '14px' }}>
-            Do not have an account?{' '}
-            <Link href="/register" style={{ color: '#00d084', textDecoration: 'none', fontWeight: '500' }}>
-              Create one now
-            </Link>
-          </p>
-
-          {error && (
-            <div style={{
-              background: 'rgba(255,71,87,0.1)', border: '1px solid #ff4757',
-              borderRadius: '8px', padding: '12px 16px',
-              color: '#ff4757', fontSize: '14px', marginBottom: '20px',
+            <h1 style={{
+              color: 'white', fontSize: '44px', fontWeight: '700',
+              lineHeight: '1.2', marginBottom: '20px',
             }}>
-              {error}
-            </div>
-          )}
+              Hello,<br />Welcome! 👋
+            </h1>
+            <p style={{
+              color: 'rgba(255,255,255,0.6)', fontSize: '16px',
+              lineHeight: '1.6', maxWidth: '380px',
+            }}>
+              Manage your store, track orders, and grow your business — all in one place.
+            </p>
 
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                style={{
-                  width: '100%', padding: '14px 16px',
-                  background: '#16213e', border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px', color: 'white', fontSize: '14px',
-                  outline: 'none', boxSizing: 'border-box',
-                }}
-              />
+            <div style={{ marginTop: '48px', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
+              © 2026 ShopFlow. All rights reserved.
             </div>
+          </div>
+        </div>
 
-            <div style={{ marginBottom: '28px' }}>
-              <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                style={{
-                  width: '100%', padding: '14px 16px',
-                  background: '#16213e', border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px', color: 'white', fontSize: '14px',
-                  outline: 'none', boxSizing: 'border-box',
-                }}
-              />
-            </div>
+        {/* Right Side */}
+        <div className="right-side" style={{
+          flex: 1, background: '#0d0d1a',
+          display: 'flex', flexDirection: 'column',
+          justifyContent: 'center', alignItems: 'center', padding: '60px',
+        }}>
+          <div style={{ maxWidth: '400px', width: '100%' }}>
+            <h2 style={{ color: 'white', fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
+              Welcome Back!
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '32px', fontSize: '14px' }}>
+              Don't have an account?{' '}
+              <Link href="/register" style={{ color: '#00d084', textDecoration: 'none', fontWeight: '500' }}>
+                Create one now
+              </Link>
+            </p>
 
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%', padding: '14px',
-                background: loading ? '#555' : '#00d084',
-                border: 'none', borderRadius: '10px',
-                color: '#1a1a2e', fontSize: '16px', fontWeight: '600',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                transition: 'opacity 0.2s',
-              }}
-            >
-              {loading ? 'Logging in...' : 'Login Now'}
-            </button>
-          </form>
+            {error && (
+              <div style={{
+                background: 'rgba(255,71,87,0.1)', border: '1px solid #ff4757',
+                borderRadius: '8px', padding: '12px 16px',
+                color: '#ff4757', fontSize: '14px', marginBottom: '20px',
+              }}>
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div>
+                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                  Email Address
+                </label>
+                <input
+                  className="input-field"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                  Password
+                </label>
+                <input
+                  className="input-field"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="login-btn"
+                disabled={loading}
+                style={{ opacity: loading ? 0.7 : 1 }}
+              >
+                {loading ? 'Logging in...' : 'Login Now →'}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
