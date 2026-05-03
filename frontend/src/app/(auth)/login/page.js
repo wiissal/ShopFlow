@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
 const PARTICLE_COUNT = 60;
+const fullText = 'Hi!\n Welcome to ShopFlow.';
 
 function useParticles(canvasRef) {
   useEffect(() => {
@@ -38,7 +39,6 @@ function useParticles(canvasRef) {
         if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
       });
 
-      // Draw lines between close particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
@@ -65,13 +65,14 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(135);
+  const [displayed, setDisplayed] = useState('');
   const canvasRef = useRef(null);
   const { login } = useAuth();
   const router = useRouter();
 
   useParticles(canvasRef);
 
-  // Gradient shift animation
+  // Gradient shift
   useEffect(() => {
     let angle = 135;
     let direction = 1;
@@ -81,6 +82,17 @@ export default function LoginPage() {
       if (angle <= 90) direction = 1;
       setGradientAngle(angle);
     }, 30);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Typewriter
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(fullText.slice(0, i + 1));
+      i++;
+      if (i === fullText.length) clearInterval(interval);
+    }, 80);
     return () => clearInterval(interval);
   }, []);
 
@@ -138,9 +150,7 @@ export default function LoginPage() {
           transform: translateY(-2px);
           box-shadow: 0 8px 25px rgba(0,208,132,0.5);
         }
-        .login-btn:active {
-          transform: translateY(0);
-        }
+        .login-btn:active { transform: translateY(0); }
         .logo-box {
           width: 52px; height: 52px;
           border-radius: 14px;
@@ -152,7 +162,6 @@ export default function LoginPage() {
           font-weight: bold;
           color: #1a1a2e;
           margin-bottom: 16px;
-          box-shadow: 0 0 20px rgba(0,208,132,0.4), 0 0 60px rgba(0,208,132,0.1);
           animation: glow 3s ease-in-out infinite;
         }
         @keyframes glow {
@@ -166,6 +175,10 @@ export default function LoginPage() {
         @keyframes fadeInLeft {
           from { opacity: 0; transform: translateX(-40px); }
           to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
         }
         .left-side { animation: fadeInLeft 1s ease forwards; }
         .right-side { animation: fadeInRight 1s ease forwards; }
@@ -184,13 +197,11 @@ export default function LoginPage() {
           position: 'relative',
           overflow: 'hidden',
         }}>
-          {/* Particles canvas */}
           <canvas ref={canvasRef} style={{
             position: 'absolute', top: 0, left: 0,
             width: '100%', height: '100%', pointerEvents: 'none',
           }} />
 
-          {/* Content */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ marginBottom: '48px' }}>
               <div className="logo-box">S</div>
@@ -199,15 +210,24 @@ export default function LoginPage() {
 
             <h1 style={{
               color: 'white', fontSize: '44px', fontWeight: '700',
-              lineHeight: '1.2', marginBottom: '20px',
+              lineHeight: '1.2', marginBottom: '20px', whiteSpace: 'pre-line',
             }}>
-              Hello,<br />Welcome! 👋
+              {displayed}
+              <span style={{
+                display: 'inline-block',
+                width: '3px', height: '48px',
+                background: '#00d084',
+                marginLeft: '4px',
+                verticalAlign: 'middle',
+                animation: 'blink 1s step-end infinite',
+              }} />
             </h1>
+
             <p style={{
               color: 'rgba(255,255,255,0.6)', fontSize: '16px',
               lineHeight: '1.6', maxWidth: '380px',
             }}>
-              Manage your store, track orders, and grow your business — all in one place.
+              Manage your store, track orders, and grow your business all in one place.
             </p>
 
             <div style={{ marginTop: '48px', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
@@ -278,7 +298,7 @@ export default function LoginPage() {
                 disabled={loading}
                 style={{ opacity: loading ? 0.7 : 1 }}
               >
-                {loading ? 'Logging in...' : 'Login Now →'}
+                {loading ? 'Logging in...' : 'Login ...'}
               </button>
             </form>
           </div>
