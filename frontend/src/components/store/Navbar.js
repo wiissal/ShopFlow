@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { ShoppingCart, LogOut, User, Package } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 
@@ -15,9 +16,7 @@ export default function Navbar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (search.trim()) {
-      router.push(`/products?search=${search}`);
-    }
+    if (search.trim()) router.push(`/products?search=${search}`);
   };
 
   const handleLogout = () => {
@@ -30,29 +29,14 @@ export default function Navbar() {
   return (
     <>
       <style>{`
-        .announcement-bar {
-          background: #00d084;
-          color: #0a0a16;
-          text-align: center;
-          padding: 8px 20px;
-          font-size: 13px;
-          font-weight: 600;
-          letter-spacing: 0.3px;
-        }
-        .announcement-bar a {
-          color: #0a0a16;
-          font-weight: 700;
-          text-decoration: underline;
-          margin-left: 8px;
-        }
         .main-nav {
           background: #0d0d1a;
           border-bottom: 1px solid rgba(255,255,255,0.06);
           padding: 0 60px;
           height: 70px;
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
+          display: flex;
           align-items: center;
+          justify-content: space-between;
           font-family: Inter, sans-serif;
           position: sticky;
           top: 0;
@@ -63,6 +47,7 @@ export default function Navbar() {
           align-items: center;
           gap: 10px;
           text-decoration: none;
+          flex-shrink: 0;
         }
         .nav-logo-box {
           width: 36px; height: 36px;
@@ -81,10 +66,13 @@ export default function Navbar() {
           font-weight: 700;
           letter-spacing: -0.5px;
         }
-        .nav-links {
+        .nav-center {
           display: flex;
           align-items: center;
           gap: 4px;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
         }
         .nav-link {
           color: rgba(255,255,255,0.6);
@@ -95,6 +83,7 @@ export default function Navbar() {
           border-radius: 8px;
           transition: all 0.2s;
           position: relative;
+          white-space: nowrap;
         }
         .nav-link:hover {
           color: white;
@@ -107,7 +96,7 @@ export default function Navbar() {
         .nav-link.active::after {
           content: '';
           position: absolute;
-          bottom: -2px;
+          bottom: 2px;
           left: 50%;
           transform: translateX(-50%);
           width: 4px; height: 4px;
@@ -118,7 +107,7 @@ export default function Navbar() {
           display: flex;
           align-items: center;
           gap: 8px;
-          justify-content: flex-end;
+          flex-shrink: 0;
         }
         .nav-icon-btn {
           display: flex;
@@ -173,10 +162,13 @@ export default function Navbar() {
           transform: translateY(-1px);
         }
         .nav-btn-logout {
+          display: flex;
+          align-items: center;
+          gap: 6px;
           background: rgba(255,71,87,0.08);
           border: 1px solid rgba(255,71,87,0.2);
           border-radius: 10px;
-          padding: 9px 16px;
+          padding: 9px 14px;
           color: #ff4757;
           font-size: 13px;
           font-weight: 500;
@@ -199,18 +191,15 @@ export default function Navbar() {
         .admin-badge:hover { background: rgba(246,201,14,0.18); }
       `}</style>
 
-     
-
-      {/* Main Nav */}
       <nav className="main-nav">
-        {/* Left — Logo */}
+        {/* Logo */}
         <Link href="/" className="nav-logo">
           <div className="nav-logo-box">S</div>
           <span className="nav-logo-text">ShopFlow</span>
         </Link>
 
-        {/* Center — Links */}
-        <div className="nav-links">
+        {/* Center Links */}
+        <div className="nav-center">
           <Link href="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>Home</Link>
           <Link href="/products" className={`nav-link ${isActive('/products') ? 'active' : ''}`}>Products</Link>
           <Link href="/products?category=laptops" className="nav-link">Laptops</Link>
@@ -218,11 +207,17 @@ export default function Navbar() {
           <Link href="/products?category=gaming" className="nav-link">Gaming</Link>
         </div>
 
-        {/* Right — Actions */}
+        {/* Right */}
         <div className="nav-right">
+          {user && (
+            <Link href="/orders" className="nav-icon-btn">
+              <Package size={16} />
+            </Link>
+          )}
 
           <Link href="/cart" className="nav-icon-btn">
-            🛒
+            <ShoppingCart size={16} />
+            Cart
             {count > 0 && <span className="cart-badge">{count}</span>}
           </Link>
 
@@ -231,10 +226,14 @@ export default function Navbar() {
           )}
 
           {user ? (
-            <button className="nav-btn-logout" onClick={handleLogout}>Logout</button>
+            <button className="nav-btn-logout" onClick={handleLogout}>
+              <LogOut size={15} />
+            </button>
           ) : (
             <>
-              <Link href="/login" className="nav-icon-btn">Log in</Link>
+              <Link href="/login" className="nav-icon-btn">
+                <User size={15} /> Log in
+              </Link>
               <Link href="/register" className="nav-btn-primary">Sign Up</Link>
             </>
           )}
