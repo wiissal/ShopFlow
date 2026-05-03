@@ -104,9 +104,9 @@ export default function LoginPage() {
     setLoading(false);
     if (res.success) {
       if (res.data.user.role === 'admin') {
-        router.push('/admin');
+        router.push('/admin'); //goesto dashboard
       } else {
-        router.push('/');
+        router.push('/'); //goes to store
       }
     } else {
       setError(res.message || 'Invalid credentials');
