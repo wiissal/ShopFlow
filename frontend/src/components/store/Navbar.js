@@ -199,11 +199,7 @@ export default function Navbar() {
         .admin-badge:hover { background: rgba(246,201,14,0.18); }
       `}</style>
 
-      {/* Announcement Bar */}
-      <div className="announcement-bar">
-        🚚 Free shipping on orders over $50 —
-        <Link href="/products">Shop Now</Link>
-      </div>
+     
 
       {/* Main Nav */}
       <nav className="main-nav">
@@ -224,9 +220,6 @@ export default function Navbar() {
 
         {/* Right — Actions */}
         <div className="nav-right">
-          {user && (
-            <Link href="/orders" className="nav-icon-btn">📦</Link>
-          )}
 
           <Link href="/cart" className="nav-icon-btn">
             🛒
