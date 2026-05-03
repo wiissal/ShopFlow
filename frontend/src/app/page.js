@@ -481,10 +481,7 @@ export default function HomePage() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-left">
-          <div className="hero-badge">
-            <span></span>
-            New Collection 2026
-          </div>
+          
           <h1>
             Next Level<br />
             <span className="accent">Electronics</span><br />
@@ -501,22 +498,7 @@ export default function HomePage() {
               Join Free
             </Link>
           </div>
-          <div className="hero-stats">
-            <div className="hero-stat">
-              <span className="hero-stat-num">500+</span>
-              <span className="hero-stat-label">Products</span>
-            </div>
-            <div className="hero-divider" />
-            <div className="hero-stat">
-              <span className="hero-stat-num">10K+</span>
-              <span className="hero-stat-label">Customers</span>
-            </div>
-            <div className="hero-divider" />
-            <div className="hero-stat">
-              <span className="hero-stat-num">4.9★</span>
-              <span className="hero-stat-label">Rating</span>
-            </div>
-          </div>
+         
         </div>
 
         <div className="hero-right">
@@ -525,13 +507,7 @@ export default function HomePage() {
             <img src="/hero-laptop.jpg" alt="Latest Electronics" />
             <div className="hero-image-overlay" />
           </div>
-          <div className="floating-card">
-            <div className="floating-card-icon">💻</div>
-            <div className="floating-card-text">
-              <span className="floating-card-name">Gaming Laptop Pro</span>
-              <span className="floating-card-price">$1,299.00</span>
-            </div>
-          </div>
+          
         </div>
       </section>
 
@@ -553,13 +529,18 @@ export default function HomePage() {
           <span className="stat-num">Free</span>
           <div className="stat-label">Shipping over $50</div>
         </div>
+        <div className="stat-item">
+          <span className="stat-num">4.9★</span>
+          <div className="stat-label">Customer Rating</div>
+        </div>
+        
       </div>
 
       {/* FEATURED PRODUCTS */}
       <section className="section">
         <div className="section-header">
           <div>
-            <div className="section-tag">✦ Featured</div>
+            <div className="section-tag"> Featured</div>
             <h2 className="section-title">Latest Products</h2>
           </div>
           <Link href="/products" className="view-all">View All Products →</Link>
