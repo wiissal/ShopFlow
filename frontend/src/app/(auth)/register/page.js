@@ -231,7 +231,7 @@ export default function RegisterPage() {
               color: 'rgba(255,255,255,0.6)', fontSize: '16px',
               lineHeight: '1.6', maxWidth: '380px',
             }}>
-              Create your account and start shopping — thousands of products waiting for you.
+              Create your account and start shopping thousands of products waiting for you.
             </p>
 
             <div style={{ marginTop: '48px', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
@@ -278,7 +278,7 @@ export default function RegisterPage() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Wissal Ouboujemaa"
+                  placeholder="Your full name"
                   required
                 />
               </div>
@@ -331,7 +331,7 @@ export default function RegisterPage() {
                 disabled={loading}
                 style={{ opacity: loading ? 0.7 : 1 }}
               >
-                {loading ? 'Creating account...' : 'Create Account →'}
+                {loading ? 'Creating account...' : 'Create Account '}
               </button>
             </form>
           </div>
