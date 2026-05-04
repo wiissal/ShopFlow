@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { ShoppingCart, LogOut, User, Package } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useCart } from '@/context/CartContext';
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { ShoppingCart, LogOut, User, Package } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const { count } = useCart();
   const router = useRouter();
   const pathname = usePathname();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
-    router.push('/login');
+    router.push("/login");
   };
 
   const isActive = (path) => pathname === path;
@@ -200,13 +200,28 @@ export default function Navbar() {
 
         {/* Center Links */}
         <div className="nav-center">
-          <Link href="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>Home</Link>
-          <Link href="/products" className={`nav-link ${isActive('/products') ? 'active' : ''}`}>Products</Link>
-          <Link href="/products?category=laptops" className="nav-link">Laptops</Link>
-          <Link href="/products?category=smartphones" className="nav-link">Phones</Link>
-          <Link href="/products?category=gaming" className="nav-link">Gaming</Link>
+          <Link
+            href="/"
+            className={`nav-link ${isActive("/") ? "active" : ""}`}
+          >
+            Home
+          </Link>
+          <Link href="/products?category=laptops" className="nav-link">
+            Laptops
+          </Link>
+          <Link href="/products?category=smartphones" className="nav-link">
+            Phones
+          </Link>
+          <Link href="/products?category=accessories" className="nav-link">
+            Accessories
+          </Link>
+          <Link href="/products?category=audio" className="nav-link">
+            Audio
+          </Link>
+          <Link href="/products?category=gaming" className="nav-link">
+            Gaming
+          </Link>
         </div>
-
         {/* Right */}
         <div className="nav-right">
           {user && (
@@ -221,8 +236,10 @@ export default function Navbar() {
             {count > 0 && <span className="cart-badge">{count}</span>}
           </Link>
 
-          {user?.role === 'admin' && (
-            <Link href="/admin" className="admin-badge">⚡ Admin</Link>
+          {user?.role === "admin" && (
+            <Link href="/admin" className="admin-badge">
+              ⚡ Admin
+            </Link>
           )}
 
           {user ? (
@@ -234,7 +251,9 @@ export default function Navbar() {
               <Link href="/login" className="nav-icon-btn">
                 <User size={15} /> Log in
               </Link>
-              <Link href="/register" className="nav-btn-primary">Sign Up</Link>
+              <Link href="/register" className="nav-btn-primary">
+                Sign Up
+              </Link>
             </>
           )}
         </div>
