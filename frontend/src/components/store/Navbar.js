@@ -3,7 +3,15 @@
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { ShoppingCart, LogOut, User, Package, Search, Phone, MapPin } from "lucide-react";
+import {
+  ShoppingCart,
+  LogOut,
+  User,
+  Package,
+  Search,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
@@ -264,6 +272,7 @@ export default function Navbar() {
           height: 42px;
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 4px;
           font-family: Inter, sans-serif;
           position: sticky;
@@ -300,7 +309,7 @@ export default function Navbar() {
 
       {/* ── BAR 1 — TOP INFO ── */}
       <div className="top-bar">
-        <div className="top-bar-left" style={{ position: 'relative' }}>
+        <div className="top-bar-left" style={{ position: "relative" }}>
           <a href="#">🇲🇦 Morocco / English</a>
           <div className="top-bar-divider" />
           <a href="#">Accessibility</a>
@@ -309,17 +318,48 @@ export default function Navbar() {
         </div>
 
         <div className="top-bar-center">
-          LIMITED TIME: <span>FREE SHIPPING & RETURNS</span> ON $99+ PURCHASE. NO CODE REQUIRED.{' '}
-          <a href="/products" style={{ color: '#1a8fa0', textDecoration: 'underline' }}>SHOP NOW</a>
+          LIMITED TIME: <span>FREE SHIPPING & RETURNS</span> ON $99+ PURCHASE.
+          NO CODE REQUIRED.{" "}
+          <a
+            href="/products"
+            style={{ color: "#1a8fa0", textDecoration: "underline" }}
+          >
+            SHOP NOW
+          </a>
         </div>
 
         <div className="top-bar-right">
-          <a href="#"><Phone size={11} /> +212 600 000 000</a>
-          <div className="top-bar-divider" style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.1)' }} />
-          <a href="/login"><User size={11} /> {user ? user.name : 'Sign In'}</a>
-          <div className="top-bar-divider" style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.1)' }} />
+          <a href="#">
+            <Phone size={11} /> +212 600 000 000
+          </a>
+          <div
+            className="top-bar-divider"
+            style={{
+              width: "1px",
+              height: "12px",
+              background: "rgba(255,255,255,0.1)",
+            }}
+          />
+          <a href="/login">
+            <User size={11} /> {user ? user.name : "Sign In"}
+          </a>
+          <div
+            className="top-bar-divider"
+            style={{
+              width: "1px",
+              height: "12px",
+              background: "rgba(255,255,255,0.1)",
+            }}
+          />
           <a href="#">Services</a>
-          <div className="top-bar-divider" style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.1)' }} />
+          <div
+            className="top-bar-divider"
+            style={{
+              width: "1px",
+              height: "12px",
+              background: "rgba(255,255,255,0.1)",
+            }}
+          />
           <a href="#">Contact Us</a>
         </div>
       </div>
@@ -347,12 +387,6 @@ export default function Navbar() {
         </div>
 
         <div className="nav-right">
-          {user && (
-            <Link href="/orders" className="nav-icon-btn">
-              <Package size={16} />
-            </Link>
-          )}
-
           <Link href="/cart" className="nav-icon-btn">
             <ShoppingCart size={16} />
             Cart
@@ -360,7 +394,9 @@ export default function Navbar() {
           </Link>
 
           {user?.role === "admin" && (
-            <Link href="/admin" className="admin-badge">⚡ Admin</Link>
+            <Link href="/admin" className="admin-badge">
+              ⚡ Admin
+            </Link>
           )}
 
           {user ? (
@@ -382,16 +418,31 @@ export default function Navbar() {
 
       {/* ── BAR 3 — CATEGORY LINKS ── */}
       <div className="cat-bar">
-        <Link href="/" className={`cat-link ${isActive("/") ? "active" : ""}`}>Home</Link>
-        <Link href="/products" className={`cat-link ${isActive("/products") ? "active" : ""}`}>Shop</Link>
-        <Link href="/products?category=laptops" className="cat-link">Laptops</Link>
-        <Link href="/products?category=smartphones" className="cat-link">Phones</Link>
-        <Link href="/products?category=accessories" className="cat-link">Accessories</Link>
-        <Link href="/products?category=audio" className="cat-link">Audio</Link>
-        <Link href="/products?category=gaming" className="cat-link">Gaming</Link>
-        <Link href="/products" className="cat-link">New Arrivals</Link>
-        <Link href="/products" className="cat-link">Best Sellers</Link>
-        {user && <Link href="/orders" className="cat-link">My Orders</Link>}
+        <Link href="/" className={`cat-link ${isActive("/") ? "active" : ""}`}>
+          Home
+        </Link>
+
+        <Link href="/products?category=laptops" className="cat-link">
+          Laptops
+        </Link>
+        <Link href="/products?category=smartphones" className="cat-link">
+          Phones
+        </Link>
+        <Link href="/products?category=accessories" className="cat-link">
+          Accessories
+        </Link>
+        <Link href="/products?category=audio" className="cat-link">
+          Audio
+        </Link>
+        <Link href="/products?category=gaming" className="cat-link">
+          Gaming
+        </Link>
+        <Link href="/products" className="cat-link">
+          New Arrivals
+        </Link>
+        <Link href="/products" className="cat-link">
+          Best Sellers
+        </Link>
       </div>
     </>
   );
