@@ -74,7 +74,7 @@ const products = [
     price: 689.99,
     stock: 14,
     category: 'Phones',
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=781&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 
   // Audio
@@ -142,7 +142,7 @@ const products = [
     price: 49.99,
     stock: 50,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1601999009162-2459b78386a8?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1518547606470-00ac2ae882af?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 
   // Gaming
