@@ -408,7 +408,7 @@ export default function HomePage() {
           <img
             key={heroIndex}
             src={heroProduct.image}
-            alt={heroProduct.name}
+            alt=""
             className={`hero-bg${fading ? ' fading' : ''}`}
           />
         )}
@@ -419,11 +419,6 @@ export default function HomePage() {
           <span /><span />
         </div>
 
-        {heroProduct && (
-          <div className={`hero-product-badge${fading ? ' fading' : ''}`}>
-            {heroProduct.category_name || 'Electronics'} · {heroProduct.name}
-          </div>
-        )}
 
         {heroProduct && (
           <div className={`hero-price-tag${fading ? ' fading' : ''}`}>
