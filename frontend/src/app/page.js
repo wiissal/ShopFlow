@@ -12,28 +12,25 @@ export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [fading, setFading] = useState(false);
 
- useEffect(() => {
-  productsAPI.getAll({ limit: 20 }).then((res) => {
-    if (res.success) {
-      const all = res.data.products;
-
-      // Pick 1 product per category, max 5
-      const seen = new Set();
-      const featured = [];
-      for (const p of all) {
-        if (!seen.has(p.category_name) && featured.length < 4 && p.category_name !== 'Gaming') {
-          seen.add(p.category_name);
-          featured.push(p);
+  useEffect(() => {
+    productsAPI.getAll({ limit: 20 }).then((res) => {
+      if (res.success) {
+        const all = res.data.products;
+        const seen = new Set();
+        const featured = [];
+        for (const p of all) {
+          if (!seen.has(p.category_name) && featured.length < 4 && p.category_name !== 'Gaming') {
+            seen.add(p.category_name);
+            featured.push(p);
+          }
         }
+        setProducts(featured);
+        const withImages = featured.filter((p) => p.image);
+        setFeaturedProducts(withImages.length > 0 ? withImages : featured);
       }
-
-      setProducts(featured);
-      const withImages = featured.filter((p) => p.image);
-      setFeaturedProducts(withImages.length > 0 ? withImages : featured);
-    }
-    setLoading(false);
-  });
-}, []);
+      setLoading(false);
+    });
+  }, []);
 
   useEffect(() => {
     if (featuredProducts.length < 2) return;
@@ -53,7 +50,7 @@ export default function HomePage() {
     <>
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a16; font-family: Inter, sans-serif; }
+        body { background: #071f2e; font-family: Inter, sans-serif; }
 
         header, nav {
           background: transparent !important;
@@ -88,10 +85,10 @@ export default function HomePage() {
           inset: 0;
           background: linear-gradient(
             to bottom,
-            rgba(10,10,22,0.15) 0%,
-            rgba(10,10,22,0.1) 35%,
-            rgba(10,10,22,0.65) 65%,
-            rgba(10,10,22,0.95) 100%
+            rgba(7,31,46,0.15) 0%,
+            rgba(7,31,46,0.1) 35%,
+            rgba(7,31,46,0.65) 65%,
+            rgba(7,31,46,0.95) 100%
           );
         }
         .hero-accent-lines {
@@ -150,22 +147,6 @@ export default function HomePage() {
           width: 24px;
           border-radius: 3px;
         }
-        .hero-product-badge {
-          position: absolute;
-          top: 90px;
-          right: 80px;
-          z-index: 2;
-          background: rgba(255,255,255,0.08);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.15);
-          border-radius: 100px;
-          padding: 8px 18px;
-          color: rgba(255,255,255,0.8);
-          font-size: 13px;
-          font-weight: 500;
-          transition: opacity 0.4s;
-        }
-        .hero-product-badge.fading { opacity: 0; }
         .hero-price-tag {
           position: absolute;
           bottom: 140px;
@@ -183,14 +164,14 @@ export default function HomePage() {
           letter-spacing: 1px;
         }
         .hero-price-value {
-          color: #00d084;
+          color: #1a8fa0;
           font-size: 32px;
           font-weight: 800;
           text-align: right;
         }
         .btn-primary {
           background: white;
-          color: #0a0a16;
+          color: #071f2e;
           padding: 15px 30px;
           border-radius: 100px;
           font-weight: 700;
@@ -203,31 +184,31 @@ export default function HomePage() {
           white-space: nowrap;
         }
         .btn-primary:hover {
-          background: #00d084;
+          background: #1a8fa0;
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0,208,132,0.4);
+          box-shadow: 0 8px 30px rgba(26,143,160,0.4);
         }
 
         .stats-bar {
           display: flex;
           justify-content: center;
-          background: #0d0d1a;
-          border-top: 1px solid rgba(255,255,255,0.05);
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          background: #0a2535;
+          border-top: 1px solid rgba(26,143,160,0.1);
+          border-bottom: 1px solid rgba(26,143,160,0.1);
         }
         .stat-item {
           flex: 1;
           text-align: center;
           padding: 28px 20px;
-          border-right: 1px solid rgba(255,255,255,0.05);
+          border-right: 1px solid rgba(26,143,160,0.1);
           transition: background 0.3s;
         }
         .stat-item:last-child { border-right: none; }
-        .stat-item:hover { background: rgba(0,208,132,0.03); }
-        .stat-num { color: #00d084; font-size: 28px; font-weight: 800; display: block; }
+        .stat-item:hover { background: rgba(26,143,160,0.05); }
+        .stat-num { color: #1a8fa0; font-size: 28px; font-weight: 800; display: block; }
         .stat-label { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 4px; }
 
-        .section { padding: 80px; background: #0a0a16; }
+        .section { padding: 80px; background: #071f2e; }
         .section-header {
           display: flex;
           justify-content: space-between;
@@ -235,7 +216,7 @@ export default function HomePage() {
           margin-bottom: 40px;
         }
         .section-tag {
-          color: #00d084;
+          color: #1a8fa0;
           font-size: 12px;
           font-weight: 700;
           text-transform: uppercase;
@@ -255,7 +236,7 @@ export default function HomePage() {
           padding-bottom: 4px;
           border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .view-all:hover { color: #00d084; border-bottom-color: #00d084; }
+        .view-all:hover { color: #1a8fa0; border-bottom-color: #1a8fa0; }
 
         .products-grid {
           display: grid;
@@ -263,8 +244,8 @@ export default function HomePage() {
           gap: 20px;
         }
         .product-card {
-          background: #111827;
-          border: 1px solid rgba(255,255,255,0.06);
+          background: #0a2535;
+          border: 1px solid rgba(26,143,160,0.1);
           border-radius: 18px;
           overflow: hidden;
           transition: all 0.35s ease;
@@ -273,13 +254,13 @@ export default function HomePage() {
         }
         .product-card:hover {
           transform: translateY(-8px);
-          border-color: rgba(0,208,132,0.25);
+          border-color: rgba(26,143,160,0.4);
           box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
         .product-image-wrap {
           width: 100%;
           height: 200px;
-          background: #16213e;
+          background: #0e3a4a;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -297,14 +278,14 @@ export default function HomePage() {
         .product-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(0,208,132,0.08);
+          background: rgba(26,143,160,0.08);
           opacity: 0;
           transition: opacity 0.3s;
         }
         .product-card:hover .product-overlay { opacity: 1; }
         .product-info { padding: 18px; }
         .product-cat {
-          color: #00d084;
+          color: #1a8fa0;
           font-size: 11px;
           font-weight: 700;
           text-transform: uppercase;
@@ -322,7 +303,7 @@ export default function HomePage() {
         }
         .product-footer { display: flex; justify-content: space-between; align-items: center; }
         .product-price { color: white; font-size: 20px; font-weight: 800; }
-        .product-price span { color: #00d084; font-size: 13px; font-weight: 600; margin-left: 2px; }
+        .product-price span { color: #1a8fa0; font-size: 13px; font-weight: 600; margin-left: 2px; }
         .product-stock { color: rgba(255,255,255,0.3); font-size: 12px; }
 
         .banner {
@@ -330,7 +311,7 @@ export default function HomePage() {
           border-radius: 24px;
           overflow: hidden;
           position: relative;
-          height: 280px;
+          height: 320px;
           display: flex;
           align-items: center;
         }
@@ -345,11 +326,11 @@ export default function HomePage() {
         .banner-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(90deg, rgba(10,10,22,0.95) 0%, rgba(10,10,22,0.6) 60%, transparent 100%);
+          background: linear-gradient(90deg, rgba(7,31,46,0.95) 0%, rgba(7,31,46,0.6) 50%, transparent 100%);
         }
         .banner-content { position: relative; z-index: 1; padding: 0 60px; }
         .banner-tag {
-          color: #00d084;
+          color: #1a8fa0;
           font-size: 13px;
           font-weight: 700;
           text-transform: uppercase;
@@ -365,8 +346,8 @@ export default function HomePage() {
           letter-spacing: -1px;
         }
         .banner-btn {
-          background: #00d084;
-          color: #0a0a16;
+          background: #1a8fa0;
+          color: #071f2e;
           padding: 15px 30px;
           border-radius: 100px;
           font-weight: 700;
@@ -379,12 +360,12 @@ export default function HomePage() {
         }
         .banner-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0,208,132,0.4);
+          box-shadow: 0 8px 30px rgba(26,143,160,0.4);
         }
 
         .footer {
-          background: #0d0d1a;
-          border-top: 1px solid rgba(255,255,255,0.05);
+          background: #0a2535;
+          border-top: 1px solid rgba(26,143,160,0.1);
           padding: 40px 80px;
           display: flex;
           justify-content: space-between;
@@ -395,10 +376,10 @@ export default function HomePage() {
         .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .footer-logo-box {
           width: 32px; height: 32px;
-          background: #00d084;
+          background: #1a8fa0;
           border-radius: 8px;
           display: flex; align-items: center; justify-content: center;
-          font-weight: bold; color: #0a0a16; font-size: 16px;
+          font-weight: bold; color: #071f2e; font-size: 16px;
         }
         .footer-logo-text { color: white; font-weight: 600; font-size: 16px; }
         .loading-state { text-align: center; padding: 80px; color: rgba(255,255,255,0.3); font-size: 16px; }
@@ -408,13 +389,7 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section className="hero">
-
-        <img
-          src="/hero-headphones.jpg"
-          alt="Hero Background"
-          className="hero-bg"
-        />
-
+        <img src="/hero-headphones.jpg" alt="Hero Background" className="hero-bg" />
         {heroProduct?.image && (
           <img
             key={heroIndex}
@@ -423,13 +398,8 @@ export default function HomePage() {
             className={`hero-bg${fading ? ' fading' : ''}`}
           />
         )}
-
         <div className="hero-overlay" />
-
-        <div className="hero-accent-lines">
-          <span /><span />
-        </div>
-
+        <div className="hero-accent-lines"><span /><span /></div>
 
         {heroProduct && (
           <div className={`hero-price-tag${fading ? ' fading' : ''}`}>
@@ -466,26 +436,11 @@ export default function HomePage() {
 
       {/* ── STATS BAR ── */}
       <div className="stats-bar">
-        <div className="stat-item">
-          <span className="stat-num">500+</span>
-          <div className="stat-label">Products Available</div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-num">10K+</span>
-          <div className="stat-label">Happy Customers</div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-num">24/7</span>
-          <div className="stat-label">Customer Support</div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-num">Free</span>
-          <div className="stat-label">Shipping over $50</div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-num">4.9★</span>
-          <div className="stat-label">Customer Rating</div>
-        </div>
+        <div className="stat-item"><span className="stat-num">500+</span><div className="stat-label">Products Available</div></div>
+        <div className="stat-item"><span className="stat-num">10K+</span><div className="stat-label">Happy Customers</div></div>
+        <div className="stat-item"><span className="stat-num">24/7</span><div className="stat-label">Customer Support</div></div>
+        <div className="stat-item"><span className="stat-num">Free</span><div className="stat-label">Shipping over $50</div></div>
+        <div className="stat-item"><span className="stat-num">4.9★</span><div className="stat-label">Customer Rating</div></div>
       </div>
 
       {/* ── FEATURED PRODUCTS ── */}
@@ -530,7 +485,8 @@ export default function HomePage() {
 
       {/* ── BANNER ── */}
       <div className="banner">
-        <img src="/hero-phone.jpg" alt="iPhone" className="banner-bg" />
+        <img src="https://images.unsplash.com/photo-1709859071282-9982d4d7fe81?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="iPhone" className="banner-bg" />
+
         <div className="banner-overlay" />
         <div className="banner-content">
           <div className="banner-tag">✦ New Arrival</div>
@@ -546,7 +502,6 @@ export default function HomePage() {
           <span className="footer-logo-text">ShopFlow</span>
         </Link>
         <span>© 2026 ShopFlow. Built with passion in Morocco 🇲🇦</span>
-       
       </footer>
     </>
   );

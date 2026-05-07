@@ -32,7 +32,7 @@ function useParticles(canvasRef) {
       particles.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 208, 132, ${p.opacity})`;
+        ctx.fillStyle = `rgba(26, 143, 160, ${p.opacity})`;
         ctx.fill();
         p.x += p.dx;
         p.y += p.dy;
@@ -50,7 +50,7 @@ function useParticles(canvasRef) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0, 208, 132, ${0.1 * (1 - dist / 80)})`;
+            ctx.strokeStyle = `rgba(26, 143, 160, ${0.1 * (1 - dist / 80)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -130,8 +130,8 @@ export default function RegisterPage() {
         .input-field {
           width: 100%;
           padding: 14px 16px;
-          background: #16213e;
-          border: 1px solid rgba(255,255,255,0.1);
+          background: #0a2535;
+          border: 1px solid rgba(26,143,160,0.2);
           border-radius: 10px;
           color: white;
           font-size: 14px;
@@ -139,44 +139,44 @@ export default function RegisterPage() {
           transition: all 0.3s ease;
         }
         .input-field:focus {
-          border-color: #00d084;
-          box-shadow: 0 0 0 3px rgba(0,208,132,0.15);
-          background: #1a2744;
+          border-color: #1a8fa0;
+          box-shadow: 0 0 0 3px rgba(26,143,160,0.15);
+          background: #0e3a4a;
         }
         .register-btn {
           width: 100%;
           padding: 14px;
-          background: #00d084;
+          background: #1a8fa0;
           border: none;
           border-radius: 10px;
-          color: #1a1a2e;
+          color: #071f2e;
           font-size: 16px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0,208,132,0.3);
+          box-shadow: 0 4px 15px rgba(26,143,160,0.3);
         }
         .register-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0,208,132,0.5);
+          box-shadow: 0 8px 25px rgba(26,143,160,0.5);
         }
         .register-btn:active { transform: translateY(0); }
         .logo-box {
           width: 52px; height: 52px;
           border-radius: 14px;
-          background: #00d084;
+          background: #1a8fa0;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 26px;
           font-weight: bold;
-          color: #1a1a2e;
+          color: #071f2e;
           margin-bottom: 16px;
           animation: glow 3s ease-in-out infinite;
         }
         @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(0,208,132,0.4), 0 0 60px rgba(0,208,132,0.1); }
-          50% { box-shadow: 0 0 30px rgba(0,208,132,0.7), 0 0 80px rgba(0,208,132,0.2); }
+          0%, 100% { box-shadow: 0 0 20px rgba(26,143,160,0.4), 0 0 60px rgba(26,143,160,0.1); }
+          50% { box-shadow: 0 0 30px rgba(26,143,160,0.7), 0 0 80px rgba(26,143,160,0.2); }
         }
         @keyframes fadeInRight {
           from { opacity: 0; transform: translateX(40px); }
@@ -194,19 +194,14 @@ export default function RegisterPage() {
         .right-side { animation: fadeInRight 1s ease forwards; }
       `}</style>
 
-      <div
-        style={{
-          display: "flex",
-          height: "100vh",
-          fontFamily: "Inter, sans-serif",
-        }}
-      >
+      <div style={{ display: "flex", height: "100vh", fontFamily: "Inter, sans-serif" }}>
+
         {/* Left Side */}
         <div
           className="left-side"
           style={{
             flex: 1,
-            background: `linear-gradient(${gradientAngle}deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)`,
+            background: `linear-gradient(${gradientAngle}deg, #071f2e 0%, #0a2535 40%, #0e6b7a 100%)`,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -219,10 +214,8 @@ export default function RegisterPage() {
             ref={canvasRef}
             style={{
               position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
+              top: 0, left: 0,
+              width: "100%", height: "100%",
               pointerEvents: "none",
             }}
           />
@@ -230,52 +223,33 @@ export default function RegisterPage() {
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ marginBottom: "48px" }}>
               <div className="logo-box">S</div>
-             
             </div>
 
-            <h1
-              style={{
-                color: "white",
-                fontSize: "44px",
-                fontWeight: "700",
-                lineHeight: "1.2",
-                marginBottom: "20px",
-                whiteSpace: "pre-line",
-              }}
-            >
+            <h1 style={{
+              color: "white",
+              fontSize: "44px",
+              fontWeight: "700",
+              lineHeight: "1.2",
+              marginBottom: "20px",
+              whiteSpace: "pre-line",
+            }}>
               {displayed}
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "3px",
-                  height: "48px",
-                  background: "#00d084",
-                  marginLeft: "4px",
-                  verticalAlign: "middle",
-                  animation: "blink 1s step-end infinite",
-                }}
-              />
+              <span style={{
+                display: "inline-block",
+                width: "3px",
+                height: "48px",
+                background: "#1a8fa0",
+                marginLeft: "4px",
+                verticalAlign: "middle",
+                animation: "blink 1s step-end infinite",
+              }} />
             </h1>
 
-            <p
-              style={{
-                color: "rgba(255,255,255,0.6)",
-                fontSize: "16px",
-                lineHeight: "1.6",
-                maxWidth: "380px",
-              }}
-            >
-              Create your account and start shopping thousands of products
-              waiting for you.
+            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "16px", lineHeight: "1.6", maxWidth: "380px" }}>
+              Create your account and start shopping thousands of products waiting for you.
             </p>
 
-            <div
-              style={{
-                marginTop: "48px",
-                color: "rgba(255,255,255,0.3)",
-                fontSize: "14px",
-              }}
-            >
+            <div style={{ marginTop: "48px", color: "rgba(255,255,255,0.3)", fontSize: "14px" }}>
               © 2026 ShopFlow. All rights reserved.
             </div>
           </div>
@@ -286,7 +260,7 @@ export default function RegisterPage() {
           className="right-side"
           style={{
             flex: 1,
-            background: "#0d0d1a",
+            background: "#071f2e",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -296,65 +270,33 @@ export default function RegisterPage() {
           }}
         >
           <div style={{ maxWidth: "400px", width: "100%" }}>
-            <h2
-              style={{
-                color: "white",
-                fontSize: "32px",
-                fontWeight: "700",
-                marginBottom: "8px",
-              }}
-            >
+            <h2 style={{ color: "white", fontSize: "32px", fontWeight: "700", marginBottom: "8px" }}>
               Create Account
             </h2>
-            <p
-              style={{
-                color: "rgba(255,255,255,0.5)",
-                marginBottom: "32px",
-                fontSize: "14px",
-              }}
-            >
+            <p style={{ color: "rgba(255,255,255,0.5)", marginBottom: "32px", fontSize: "14px" }}>
               Already have an account?{" "}
-              <Link
-                href="/login"
-                style={{
-                  color: "#00d084",
-                  textDecoration: "none",
-                  fontWeight: "500",
-                }}
-              >
+              <Link href="/login" style={{ color: "#1a8fa0", textDecoration: "none", fontWeight: "500" }}>
                 Login here
               </Link>
             </p>
 
             {error && (
-              <div
-                style={{
-                  background: "rgba(255,71,87,0.1)",
-                  border: "1px solid #ff4757",
-                  borderRadius: "8px",
-                  padding: "12px 16px",
-                  color: "#ff4757",
-                  fontSize: "14px",
-                  marginBottom: "20px",
-                }}
-              >
+              <div style={{
+                background: "rgba(255,71,87,0.1)",
+                border: "1px solid #ff4757",
+                borderRadius: "8px",
+                padding: "12px 16px",
+                color: "#ff4757",
+                fontSize: "14px",
+                marginBottom: "20px",
+              }}>
                 {error}
               </div>
             )}
 
-            <form
-              onSubmit={handleSubmit}
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-            >
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               <div>
-                <label
-                  style={{
-                    color: "rgba(255,255,255,0.7)",
-                    fontSize: "14px",
-                    display: "block",
-                    marginBottom: "8px",
-                  }}
-                >
+                <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", display: "block", marginBottom: "8px" }}>
                   Full Name
                 </label>
                 <input
@@ -368,14 +310,7 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label
-                  style={{
-                    color: "rgba(255,255,255,0.7)",
-                    fontSize: "14px",
-                    display: "block",
-                    marginBottom: "8px",
-                  }}
-                >
+                <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", display: "block", marginBottom: "8px" }}>
                   Email Address
                 </label>
                 <input
@@ -389,14 +324,7 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label
-                  style={{
-                    color: "rgba(255,255,255,0.7)",
-                    fontSize: "14px",
-                    display: "block",
-                    marginBottom: "8px",
-                  }}
-                >
+                <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", display: "block", marginBottom: "8px" }}>
                   Password
                 </label>
                 <div style={{ position: "relative" }}>
@@ -432,14 +360,7 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label
-                  style={{
-                    color: "rgba(255,255,255,0.7)",
-                    fontSize: "14px",
-                    display: "block",
-                    marginBottom: "8px",
-                  }}
-                >
+                <label style={{ color: "rgba(255,255,255,0.7)", fontSize: "14px", display: "block", marginBottom: "8px" }}>
                   Confirm Password
                 </label>
                 <div style={{ position: "relative" }}>
@@ -469,21 +390,18 @@ export default function RegisterPage() {
                       padding: 0,
                     }}
                   >
-                    {showConfirmPassword ? (
-                      <EyeOff size={18} />
-                    ) : (
-                      <Eye size={18} />
-                    )}
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
+
               <button
                 type="submit"
                 className="register-btn"
                 disabled={loading}
                 style={{ opacity: loading ? 0.7 : 1 }}
               >
-                {loading ? "Creating account..." : "Create Account "}
+                {loading ? "Creating account..." : "Create Account"}
               </button>
             </form>
           </div>

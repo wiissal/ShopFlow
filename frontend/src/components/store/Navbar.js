@@ -30,8 +30,8 @@ export default function Navbar() {
     <>
       <style>{`
         .main-nav {
-          background: #0d0d1a;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          background: #0a2535;
+          border-bottom: 1px solid rgba(26,143,160,0.15);
           padding: 0 60px;
           height: 70px;
           display: flex;
@@ -52,12 +52,12 @@ export default function Navbar() {
         .nav-logo-box {
           width: 36px; height: 36px;
           border-radius: 10px;
-          background: #00d084;
+          background: #1a8fa0;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 800;
-          color: #0a0a16;
+          color: #071f2e;
           font-size: 18px;
         }
         .nav-logo-text {
@@ -87,11 +87,11 @@ export default function Navbar() {
         }
         .nav-link:hover {
           color: white;
-          background: rgba(255,255,255,0.05);
+          background: rgba(26,143,160,0.08);
         }
         .nav-link.active {
-          color: #00d084;
-          background: rgba(0,208,132,0.08);
+          color: #1a8fa0;
+          background: rgba(26,143,160,0.1);
         }
         .nav-link.active::after {
           content: '';
@@ -100,7 +100,7 @@ export default function Navbar() {
           left: 50%;
           transform: translateX(-50%);
           width: 4px; height: 4px;
-          background: #00d084;
+          background: #1a8fa0;
           border-radius: 50%;
         }
         .nav-right {
@@ -114,7 +114,7 @@ export default function Navbar() {
           align-items: center;
           gap: 6px;
           background: transparent;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid rgba(26,143,160,0.2);
           border-radius: 10px;
           padding: 8px 14px;
           color: rgba(255,255,255,0.7);
@@ -127,15 +127,15 @@ export default function Navbar() {
           position: relative;
         }
         .nav-icon-btn:hover {
-          border-color: rgba(255,255,255,0.2);
+          border-color: #1a8fa0;
           color: white;
-          background: rgba(255,255,255,0.04);
+          background: rgba(26,143,160,0.08);
         }
         .cart-badge {
           position: absolute;
           top: -5px; right: -5px;
-          background: #00d084;
-          color: #0a0a16;
+          background: #1a8fa0;
+          color: #071f2e;
           width: 18px; height: 18px;
           border-radius: 50%;
           font-size: 11px;
@@ -145,11 +145,11 @@ export default function Navbar() {
           justify-content: center;
         }
         .nav-btn-primary {
-          background: #00d084;
+          background: #1a8fa0;
           border: none;
           border-radius: 10px;
           padding: 9px 20px;
-          color: #0a0a16;
+          color: #071f2e;
           font-weight: 700;
           font-size: 13px;
           cursor: pointer;
@@ -178,51 +178,36 @@ export default function Navbar() {
         }
         .nav-btn-logout:hover { background: rgba(255,71,87,0.15); }
         .admin-badge {
-          background: rgba(246,201,14,0.1);
-          border: 1px solid rgba(246,201,14,0.2);
+          background: rgba(26,143,160,0.1);
+          border: 1px solid rgba(26,143,160,0.25);
           border-radius: 10px;
           padding: 9px 14px;
-          color: #f6c90e;
+          color: #7ab3b8;
           font-size: 13px;
           font-weight: 600;
           text-decoration: none;
           transition: all 0.2s;
         }
-        .admin-badge:hover { background: rgba(246,201,14,0.18); }
+        .admin-badge:hover { background: rgba(26,143,160,0.18); }
       `}</style>
 
       <nav className="main-nav">
-        {/* Logo */}
         <Link href="/" className="nav-logo">
           <div className="nav-logo-box">S</div>
           <span className="nav-logo-text">ShopFlow</span>
         </Link>
 
-        {/* Center Links */}
         <div className="nav-center">
-          <Link
-            href="/"
-            className={`nav-link ${isActive("/") ? "active" : ""}`}
-          >
+          <Link href="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>
             Home
           </Link>
-          <Link href="/products?category=laptops" className="nav-link">
-            Laptops
-          </Link>
-          <Link href="/products?category=smartphones" className="nav-link">
-            Phones
-          </Link>
-          <Link href="/products?category=accessories" className="nav-link">
-            Accessories
-          </Link>
-          <Link href="/products?category=audio" className="nav-link">
-            Audio
-          </Link>
-          <Link href="/products?category=gaming" className="nav-link">
-            Gaming
-          </Link>
+          <Link href="/products?category=laptops" className="nav-link">Laptops</Link>
+          <Link href="/products?category=smartphones" className="nav-link">Phones</Link>
+          <Link href="/products?category=accessories" className="nav-link">Accessories</Link>
+          <Link href="/products?category=audio" className="nav-link">Audio</Link>
+          <Link href="/products?category=gaming" className="nav-link">Gaming</Link>
         </div>
-        {/* Right */}
+
         <div className="nav-right">
           {user && (
             <Link href="/orders" className="nav-icon-btn">
@@ -237,9 +222,7 @@ export default function Navbar() {
           </Link>
 
           {user?.role === "admin" && (
-            <Link href="/admin" className="admin-badge">
-              ⚡ Admin
-            </Link>
+            <Link href="/admin" className="admin-badge">⚡ Admin</Link>
           )}
 
           {user ? (
