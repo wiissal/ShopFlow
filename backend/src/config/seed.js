@@ -9,7 +9,7 @@ const categories = [
 ];
 
 const products = [
-  // Laptops
+  // ── LAPTOPS ──
   {
     name: 'MacBook Pro 14"',
     description: 'Apple M3 Pro chip, 18GB RAM, 512GB SSD. The most powerful MacBook ever.',
@@ -42,8 +42,40 @@ const products = [
     category: 'Laptops',
     image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&q=80',
   },
+  {
+    name: 'MacBook Air M2',
+    description: 'Supercharged by M2 chip, 8GB RAM, 256GB SSD. Impossibly thin.',
+    price: 1099.99,
+    stock: 20,
+    category: 'Laptops',
+    image: 'https://images.unsplash.com/photo-1611186871525-6e2a39b04636?w=800&q=80',
+  },
+  {
+    name: 'HP Spectre x360',
+    description: '13.5" OLED touch, Intel Core i7, 16GB RAM, 512GB SSD.',
+    price: 1399.99,
+    stock: 10,
+    category: 'Laptops',
+    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80',
+  },
+  {
+    name: 'Microsoft Surface Pro 9',
+    description: 'Intel Core i5, 8GB RAM, 256GB SSD. Tablet meets laptop.',
+    price: 999.99,
+    stock: 12,
+    category: 'Laptops',
+    image: 'https://images.unsplash.com/photo-1542393545-10f5cde2c810?w=800&q=80',
+  },
+  {
+    name: 'Razer Blade 15',
+    description: 'Intel Core i9, RTX 4070, 16GB RAM. The ultimate gaming laptop.',
+    price: 2499.99,
+    stock: 6,
+    category: 'Laptops',
+    image: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&q=80',
+  },
 
-  // Phones
+  // ── PHONES ──
   {
     name: 'iPhone 15 Pro',
     description: 'A17 Pro chip, titanium design, 48MP camera system.',
@@ -74,10 +106,42 @@ const products = [
     price: 689.99,
     stock: 14,
     category: 'Phones',
-    image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=781&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=781&auto=format&fit=crop',
+  },
+  {
+    name: 'iPhone 14',
+    description: 'A15 Bionic chip, 6.1" Super Retina XDR display, 12MP camera.',
+    price: 699.99,
+    stock: 35,
+    category: 'Phones',
+    image: 'https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=800&q=80',
+  },
+  {
+    name: 'Samsung Galaxy A54',
+    description: '6.4" Super AMOLED, 50MP camera, 5000mAh battery.',
+    price: 449.99,
+    stock: 40,
+    category: 'Phones',
+    image: 'https://images.unsplash.com/photo-1610945264803-c22b62d2a7b3?w=800&q=80',
+  },
+  {
+    name: 'Xiaomi 13 Pro',
+    description: 'Snapdragon 8 Gen 2, Leica camera, 120W HyperCharge.',
+    price: 799.99,
+    stock: 15,
+    category: 'Phones',
+    image: 'https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=800&q=80',
+  },
+  {
+    name: 'iPhone 15',
+    description: 'A16 Bionic, Dynamic Island, USB-C, 48MP main camera.',
+    price: 799.99,
+    stock: 25,
+    category: 'Phones',
+    image: 'https://images.unsplash.com/photo-1695048064285-f6d3a82e0912?w=800&q=80',
   },
 
-  // Audio
+  // ── AUDIO ──
   {
     name: 'Sony WH-1000XM5',
     description: 'Industry-leading noise cancellation, 30hr battery, premium sound.',
@@ -110,8 +174,40 @@ const products = [
     category: 'Audio',
     image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80',
   },
+  {
+    name: 'Jabra Evolve2 85',
+    description: 'Professional wireless headset, ANC, 37hr battery.',
+    price: 299.99,
+    stock: 18,
+    category: 'Audio',
+    image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&q=80',
+  },
+  {
+    name: 'JBL Tune 760NC',
+    description: 'Wireless over-ear, ANC, 35hr playtime, foldable design.',
+    price: 99.99,
+    stock: 45,
+    category: 'Audio',
+    image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80',
+  },
+  {
+    name: 'Beats Studio Pro',
+    description: 'Personalized spatial audio, USB-C, 40hr battery.',
+    price: 349.99,
+    stock: 20,
+    category: 'Audio',
+    image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80',
+  },
+  {
+    name: 'Sony WF-1000XM5',
+    description: 'Industry-leading ANC earbuds, 8hr battery, LDAC support.',
+    price: 279.99,
+    stock: 22,
+    category: 'Audio',
+    image: 'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=800&q=80',
+  },
 
-  // Accessories
+  // ── ACCESSORIES ──
   {
     name: 'Apple MagSafe Charger',
     description: '15W fast wireless charging for iPhone 12 and later.',
@@ -142,10 +238,58 @@ const products = [
     price: 49.99,
     stock: 50,
     category: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1518547606470-00ac2ae882af?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: 'https://images.unsplash.com/photo-1518547606470-00ac2ae882af?q=80&w=687&auto=format&fit=crop',
+  },
+  {
+    name: 'Apple Watch Series 9',
+    description: 'S9 chip, Double Tap gesture, Always-On Retina display.',
+    price: 399.99,
+    stock: 25,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=800&q=80',
+  },
+  {
+    name: 'iPad Pro 11"',
+    description: 'M2 chip, Liquid Retina display, Thunderbolt port.',
+    price: 799.99,
+    stock: 15,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&q=80',
+  },
+  {
+    name: 'Logitech MX Keys',
+    description: 'Advanced wireless keyboard, backlit, multi-device.',
+    price: 109.99,
+    stock: 40,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80',
+  },
+  {
+    name: 'Samsung T7 SSD 1TB',
+    description: 'Portable SSD, USB 3.2, 1050MB/s read speed, compact.',
+    price: 89.99,
+    stock: 50,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1597138804456-e7dca7f59d54?w=800&q=80',
+  },
+  {
+    name: 'Belkin 3-in-1 Wireless Charger',
+    description: 'Charge iPhone, AirPods and Apple Watch simultaneously.',
+    price: 149.99,
+    stock: 35,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&q=80',
+  },
+  {
+    name: 'Google Pixel Watch 2',
+    description: 'Wear OS, Fitbit health tracking, 24hr battery, LTE.',
+    price: 349.99,
+    stock: 18,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&q=80',
   },
 
-  // Gaming
+  // ── GAMING ──
   {
     name: 'PlayStation 5 Controller',
     description: 'DualSense wireless controller with haptic feedback and adaptive triggers.',
@@ -181,18 +325,16 @@ const products = [
 ];
 
 async function seed() {
-  console.log(' Starting seed...');
+  console.log('🌱 Starting seed...');
 
   try {
-    // Clear existing data
     await pool.query('DELETE FROM order_items');
     await pool.query('DELETE FROM orders');
     await pool.query('DELETE FROM products');
     await pool.query('DELETE FROM categories');
 
-    console.log('  Cleared existing data');
+    console.log('🗑️  Cleared existing data');
 
-    // Insert categories
     const categoryMap = {};
     for (const cat of categories) {
       const res = await pool.query(
@@ -200,10 +342,9 @@ async function seed() {
         [cat.name, cat.description]
       );
       categoryMap[cat.name] = res.rows[0].id;
-      console.log(`Category: ${cat.name}`);
+      console.log(`✅ Category: ${cat.name}`);
     }
 
-    // Insert products
     for (const product of products) {
       await pool.query(
         'INSERT INTO products (name, description, price, stock, image, category_id) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -216,13 +357,13 @@ async function seed() {
           categoryMap[product.category],
         ]
       );
-      console.log(`Product: ${product.name}`);
+      console.log(`✅ Product: ${product.name}`);
     }
 
-    console.log('\n Seed complete! 5 categories, 20 products added.');
+    console.log('\n🎉 Seed complete! 5 categories, 36 products added.');
     process.exit(0);
   } catch (err) {
-    console.error(' Seed failed:', err.message);
+    console.error('❌ Seed failed:', err.message);
     process.exit(1);
   }
 }
