@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Navbar from '@/components/store/Navbar';
-import { productsAPI } from '@/lib/api';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Navbar from "@/components/store/Navbar";
+import { productsAPI } from "@/lib/api";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -19,7 +19,11 @@ export default function HomePage() {
         const seen = new Set();
         const featured = [];
         for (const p of all) {
-          if (!seen.has(p.category_name) && featured.length < 4 && p.category_name !== 'Gaming') {
+          if (
+            !seen.has(p.category_name) &&
+            featured.length < 4 &&
+            p.category_name !== "Gaming"
+          ) {
             seen.add(p.category_name);
             featured.push(p);
           }
@@ -383,26 +387,90 @@ export default function HomePage() {
         }
         .footer-logo-text { color: white; font-weight: 600; font-size: 16px; }
         .loading-state { text-align: center; padding: 80px; color: rgba(255,255,255,0.3); font-size: 16px; }
+
+        /* ── BENTO GRID ── */
+.bento { padding: 60px 80px 0; background: #071f2e; }
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1fr;
+  grid-template-rows: 280px 280px;
+  gap: 16px;
+}
+.bento-card {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  background: #0a2535;
+  border: 1px solid rgba(26,143,160,0.1);
+  text-decoration: none;
+  display: block;
+  transition: all 0.3s;
+}
+.bento-card:hover { transform: scale(1.02); border-color: rgba(26,143,160,0.35); }
+.bento-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.bento-card.tall { grid-row: span 2; }
+.bento-card.wide { grid-column: span 2; }
+.bento-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(7,31,46,0.9) 0%, transparent 100%);
+}
+.bento-num {
+  color: rgba(255,255,255,0.4);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.bento-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.bento-arrow {
+  position: absolute;
+  bottom: 20px; right: 20px;
+  width: 36px; height: 36px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #071f2e;
+  font-size: 16px;
+  font-weight: 700;
+}
       `}</style>
 
       <Navbar />
 
       {/* ── HERO ── */}
       <section className="hero">
-        <img src="/hero-headphones.jpg" alt="Hero Background" className="hero-bg" />
+        <img
+          src="/hero-headphones.jpg"
+          alt="Hero Background"
+          className="hero-bg"
+        />
         {heroProduct?.image && (
           <img
             key={heroIndex}
             src={heroProduct.image}
             alt=""
-            className={`hero-bg${fading ? ' fading' : ''}`}
+            className={`hero-bg${fading ? " fading" : ""}`}
           />
         )}
         <div className="hero-overlay" />
-        <div className="hero-accent-lines"><span /><span /></div>
+        <div className="hero-accent-lines">
+          <span />
+          <span />
+        </div>
 
         {heroProduct && (
-          <div className={`hero-price-tag${fading ? ' fading' : ''}`}>
+          <div className={`hero-price-tag${fading ? " fading" : ""}`}>
             <div className="hero-price-label">Starting from</div>
             <div className="hero-price-value">$350</div>
           </div>
@@ -410,7 +478,11 @@ export default function HomePage() {
 
         <div className="hero-content">
           <div className="hero-left">
-            <h1>Built for people who<br />rely on their tech.</h1>
+            <h1>
+              Built for people who
+              <br />
+              rely on their tech.
+            </h1>
           </div>
           <div className="hero-right-actions">
             {featuredProducts.length > 1 && (
@@ -418,10 +490,13 @@ export default function HomePage() {
                 {featuredProducts.map((_, i) => (
                   <button
                     key={i}
-                    className={`hero-dot${i === heroIndex ? ' active' : ''}`}
+                    className={`hero-dot${i === heroIndex ? " active" : ""}`}
                     onClick={() => {
                       setFading(true);
-                      setTimeout(() => { setHeroIndex(i); setFading(false); }, 400);
+                      setTimeout(() => {
+                        setHeroIndex(i);
+                        setFading(false);
+                      }, 400);
                     }}
                   />
                 ))}
@@ -436,11 +511,108 @@ export default function HomePage() {
 
       {/* ── STATS BAR ── */}
       <div className="stats-bar">
-        <div className="stat-item"><span className="stat-num">500+</span><div className="stat-label">Products Available</div></div>
-        <div className="stat-item"><span className="stat-num">10K+</span><div className="stat-label">Happy Customers</div></div>
-        <div className="stat-item"><span className="stat-num">24/7</span><div className="stat-label">Customer Support</div></div>
-        <div className="stat-item"><span className="stat-num">Free</span><div className="stat-label">Shipping over $50</div></div>
-        <div className="stat-item"><span className="stat-num">4.9★</span><div className="stat-label">Customer Rating</div></div>
+        <div className="stat-item">
+          <span className="stat-num">500+</span>
+          <div className="stat-label">Products Available</div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-num">10K+</span>
+          <div className="stat-label">Happy Customers</div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-num">24/7</span>
+          <div className="stat-label">Customer Support</div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-num">Free</span>
+          <div className="stat-label">Shipping over $50</div>
+        </div>
+        <div className="stat-item">
+          <span className="stat-num">4.9★</span>
+          <div className="stat-label">Customer Rating</div>
+        </div>
+      </div>
+
+      {/* ── BENTO GRID ── */}
+      <div className="bento">
+        <div className="bento-grid">
+          {/* tall card — headphones */}
+          <Link href="/products?category=audio" className="bento-card tall">
+            <img
+              src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=800&q=80"
+              alt="Audio"
+            />
+            <div className="bento-label">
+              <div className="bento-num">// 01</div>
+              <div className="bento-title">
+                Premium
+                <br />
+                Audio
+              </div>
+            </div>
+            <div className="bento-arrow">↗</div>
+          </Link>
+
+          {/* top middle — accessories */}
+          <Link href="/products?category=accessories" className="bento-card">
+            <img
+              src="https://images.unsplash.com/photo-1625895197185-efcec01cffe0?w=800&q=80"
+              alt="Accessories"
+            />
+            <div className="bento-label">
+              <div className="bento-num">// 02</div>
+              <div className="bento-title">Accessories</div>
+            </div>
+            <div className="bento-arrow">↗</div>
+          </Link>
+
+          {/* top right — laptops */}
+          <Link href="/products?category=laptops" className="bento-card">
+            <img
+              src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80"
+              alt="Laptops"
+            />
+            <div className="bento-label">
+              <div className="bento-num">// 03</div>
+              <div className="bento-title">Laptops</div>
+            </div>
+            <div className="bento-arrow">↗</div>
+          </Link>
+
+          {/* bottom middle — airpods */}
+          <Link href="/products?category=audio" className="bento-card">
+            <img
+              src="https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800&q=80"
+              alt="Earbuds"
+            />
+            <div className="bento-label">
+              <div className="bento-num">// 04</div>
+              <div className="bento-title">
+                Sound
+                <br />
+                Perfection
+              </div>
+            </div>
+            <div className="bento-arrow">↗</div>
+          </Link>
+
+          {/* bottom right — phones */}
+          <Link href="/products?category=smartphones" className="bento-card">
+            <img
+              src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80"
+              alt="Phones"
+            />
+            <div className="bento-label">
+              <div className="bento-num">// 05</div>
+              <div className="bento-title">
+                New Series
+                <br />
+                iPhone 15 Pro
+              </div>
+            </div>
+            <div className="bento-arrow">↗</div>
+          </Link>
+        </div>
       </div>
 
       {/* ── FEATURED PRODUCTS ── */}
@@ -450,7 +622,9 @@ export default function HomePage() {
             <div className="section-tag">Featured</div>
             <h2 className="section-title">Latest Products</h2>
           </div>
-          <Link href="/products" className="view-all">View All Products →</Link>
+          <Link href="/products" className="view-all">
+            View All Products →
+          </Link>
         </div>
 
         {loading ? (
@@ -460,20 +634,31 @@ export default function HomePage() {
         ) : (
           <div className="products-grid">
             {products.map((product) => (
-              <Link key={product.id} href={`/products/${product.id}`} className="product-card">
+              <Link
+                key={product.id}
+                href={`/products/${product.id}`}
+                className="product-card"
+              >
                 <div className="product-image-wrap">
                   {product.image ? (
                     <>
                       <img src={product.image} alt={product.name} />
                       <div className="product-overlay" />
                     </>
-                  ) : '📦'}
+                  ) : (
+                    "📦"
+                  )}
                 </div>
                 <div className="product-info">
-                  <div className="product-cat">{product.category_name || 'Electronics'}</div>
+                  <div className="product-cat">
+                    {product.category_name || "Electronics"}
+                  </div>
                   <div className="product-name">{product.name}</div>
                   <div className="product-footer">
-                    <div className="product-price">${product.price}<span>USD</span></div>
+                    <div className="product-price">
+                      ${product.price}
+                      <span>USD</span>
+                    </div>
                     <div className="product-stock">{product.stock} left</div>
                   </div>
                 </div>
@@ -485,13 +670,23 @@ export default function HomePage() {
 
       {/* ── BANNER ── */}
       <div className="banner">
-        <img src="https://images.unsplash.com/photo-1709859071282-9982d4d7fe81?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="iPhone" className="banner-bg" />
+        <img
+          src="https://images.unsplash.com/photo-1709859071282-9982d4d7fe81?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="iPhone"
+          className="banner-bg"
+        />
 
         <div className="banner-overlay" />
         <div className="banner-content">
           <div className="banner-tag">✦ New Arrival</div>
-          <div className="banner-title">The New iPhone<br />is Here.</div>
-          <Link href="/products" className="banner-btn">Shop Now →</Link>
+          <div className="banner-title">
+            The New iPhone
+            <br />
+            is Here.
+          </div>
+          <Link href="/products" className="banner-btn">
+            Shop Now →
+          </Link>
         </div>
       </div>
 
