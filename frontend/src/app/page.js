@@ -423,7 +423,7 @@ export default function HomePage() {
         {heroProduct && (
           <div className={`hero-price-tag${fading ? ' fading' : ''}`}>
             <div className="hero-price-label">Starting from</div>
-            <div className="hero-price-value">${heroProduct.price}</div>
+            <div className="hero-price-value">$350</div>
           </div>
         )}
 
@@ -447,7 +447,7 @@ export default function HomePage() {
               </div>
             )}
             <Link href="/products" className="btn-primary">
-              Shop Collection →
+              Shop Collection ..
             </Link>
           </div>
         </div>
@@ -535,11 +535,7 @@ export default function HomePage() {
           <span className="footer-logo-text">ShopFlow</span>
         </Link>
         <span>© 2026 ShopFlow. Built with passion in Morocco 🇲🇦</span>
-        <div style={{ display: 'flex', gap: '24px' }}>
-          <Link href="/products" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>Products</Link>
-          <Link href="/login" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>Login</Link>
-          <Link href="/register" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>Register</Link>
-        </div>
+       
       </footer>
     </>
   );
