@@ -44,6 +44,16 @@ export default function HomePage() {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0a0a16; font-family: Inter, sans-serif; }
 
+        /* Make navbar transparent so it blends with hero image */
+        header, nav {
+          background: transparent !important;
+          border-bottom: none !important;
+          box-shadow: none !important;
+          position: absolute !important;
+          top: 0; left: 0; right: 0;
+          z-index: 10;
+        }
+
         .hero {
           position: relative;
           height: 100vh;
@@ -59,6 +69,7 @@ export default function HomePage() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center 30%;
           transition: opacity 0.4s ease;
         }
         .hero-bg.fading { opacity: 0; }
@@ -67,16 +78,16 @@ export default function HomePage() {
           inset: 0;
           background: linear-gradient(
             to bottom,
-            rgba(10,10,22,0.3) 0%,
-            rgba(10,10,22,0.2) 40%,
-            rgba(10,10,22,0.75) 75%,
-            rgba(10,10,22,0.97) 100%
+            rgba(10,10,22,0.15) 0%,
+            rgba(10,10,22,0.1) 35%,
+            rgba(10,10,22,0.65) 65%,
+            rgba(10,10,22,0.95) 100%
           );
         }
         .hero-accent-lines {
           position: absolute;
           left: 80px;
-          bottom: 160px;
+          bottom: 220px;
           display: flex;
           flex-direction: column;
           gap: 6px;
@@ -90,10 +101,11 @@ export default function HomePage() {
         }
         .hero-accent-lines span:first-child { width: 32px; }
         .hero-accent-lines span:last-child { width: 20px; }
+
         .hero-content {
           position: relative;
           z-index: 2;
-          padding: 0 80px 64px;
+          padding: 0 80px 120px;
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
@@ -130,7 +142,7 @@ export default function HomePage() {
         }
         .hero-product-badge {
           position: absolute;
-          top: 32px;
+          top: 90px;
           right: 80px;
           z-index: 2;
           background: rgba(255,255,255,0.08);
@@ -146,7 +158,7 @@ export default function HomePage() {
         .hero-product-badge.fading { opacity: 0; }
         .hero-price-tag {
           position: absolute;
-          bottom: 140px;
+          bottom: 200px;
           right: 80px;
           z-index: 2;
           transition: opacity 0.4s;
@@ -318,6 +330,7 @@ export default function HomePage() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: center center;
         }
         .banner-overlay {
           position: absolute;
@@ -386,12 +399,11 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <section className="hero">
 
-        {/* headphones always as base layer */}
+        {/* headphones as base layer — no brightness filter for clarity */}
         <img
           src="/hero-headphones.jpg"
           alt="Hero Background"
           className="hero-bg"
-          style={{ filter: 'brightness(0.85)' }}
         />
 
         {/* product image slides on top when available */}
@@ -513,13 +525,13 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── BANNER ── */}
+      {/* ── BANNER — iPhone ── */}
       <div className="banner">
-        <img src="/hero-headphones.jpg" alt="Headphones" className="banner-bg" />
+        <img src="/hero-phone.jpg" alt="iPhone" className="banner-bg" />
         <div className="banner-overlay" />
         <div className="banner-content">
           <div className="banner-tag">✦ New Arrival</div>
-          <div className="banner-title">Sony WH-1000XM5<br />Noise Cancelled.</div>
+          <div className="banner-title">The New iPhone<br />is Here.</div>
           <Link href="/products" className="banner-btn">Shop Now →</Link>
         </div>
       </div>
