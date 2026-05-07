@@ -1,18 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const PARTICLE_COUNT = 60;
-const fullText = 'Join Us,\nGet Started! ';
+const fullText = " Dont Think Twice ,\nJoin Us,\nGet Started! ";
 
 function useParticles(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
@@ -41,7 +42,10 @@ function useParticles(canvasRef) {
 
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+          const dist = Math.hypot(
+            particles[i].x - particles[j].x,
+            particles[i].y - particles[j].y,
+          );
           if (dist < 80) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -60,14 +64,16 @@ function useParticles(canvasRef) {
 }
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(135);
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
   const canvasRef = useRef(null);
   const { register } = useAuth();
   const router = useRouter();
@@ -98,22 +104,22 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (password !== confirm) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
     setLoading(true);
     const res = await register(name, email, password);
     setLoading(false);
     if (res.success) {
-      router.push('/');
+      router.push("/");
     } else {
-      setError(res.message || 'Registration failed');
+      setError(res.message || "Registration failed");
     }
   };
 
@@ -188,89 +194,167 @@ export default function RegisterPage() {
         .right-side { animation: fadeInRight 1s ease forwards; }
       `}</style>
 
-      <div style={{ display: 'flex', height: '100vh', fontFamily: 'Inter, sans-serif' }}>
-
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          fontFamily: "Inter, sans-serif",
+        }}
+      >
         {/* Left Side */}
-        <div className="left-side" style={{
-          flex: 1,
-          background: `linear-gradient(${gradientAngle}deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)`,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '60px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          <canvas ref={canvasRef} style={{
-            position: 'absolute', top: 0, left: 0,
-            width: '100%', height: '100%', pointerEvents: 'none',
-          }} />
+        <div
+          className="left-side"
+          style={{
+            flex: 1,
+            background: `linear-gradient(${gradientAngle}deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)`,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "60px",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              pointerEvents: "none",
+            }}
+          />
 
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ marginBottom: '48px' }}>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ marginBottom: "48px" }}>
               <div className="logo-box">S</div>
-              <span style={{ color: 'white', fontSize: '20px', fontWeight: '600' }}>ShopFlow</span>
+             
             </div>
 
-            <h1 style={{
-              color: 'white', fontSize: '44px', fontWeight: '700',
-              lineHeight: '1.2', marginBottom: '20px', whiteSpace: 'pre-line',
-            }}>
+            <h1
+              style={{
+                color: "white",
+                fontSize: "44px",
+                fontWeight: "700",
+                lineHeight: "1.2",
+                marginBottom: "20px",
+                whiteSpace: "pre-line",
+              }}
+            >
               {displayed}
-              <span style={{
-                display: 'inline-block',
-                width: '3px', height: '48px',
-                background: '#00d084',
-                marginLeft: '4px',
-                verticalAlign: 'middle',
-                animation: 'blink 1s step-end infinite',
-              }} />
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "3px",
+                  height: "48px",
+                  background: "#00d084",
+                  marginLeft: "4px",
+                  verticalAlign: "middle",
+                  animation: "blink 1s step-end infinite",
+                }}
+              />
             </h1>
 
-            <p style={{
-              color: 'rgba(255,255,255,0.6)', fontSize: '16px',
-              lineHeight: '1.6', maxWidth: '380px',
-            }}>
-              Create your account and start shopping thousands of products waiting for you.
+            <p
+              style={{
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "16px",
+                lineHeight: "1.6",
+                maxWidth: "380px",
+              }}
+            >
+              Create your account and start shopping thousands of products
+              waiting for you.
             </p>
 
-            <div style={{ marginTop: '48px', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
+            <div
+              style={{
+                marginTop: "48px",
+                color: "rgba(255,255,255,0.3)",
+                fontSize: "14px",
+              }}
+            >
               © 2026 ShopFlow. All rights reserved.
             </div>
           </div>
         </div>
 
         {/* Right Side */}
-        <div className="right-side" style={{
-          flex: 1, background: '#0d0d1a',
-          display: 'flex', flexDirection: 'column',
-          justifyContent: 'center', alignItems: 'center', padding: '60px',
-          overflowY: 'auto',
-        }}>
-          <div style={{ maxWidth: '400px', width: '100%' }}>
-            <h2 style={{ color: 'white', fontSize: '32px', fontWeight: '700', marginBottom: '8px' }}>
+        <div
+          className="right-side"
+          style={{
+            flex: 1,
+            background: "#0d0d1a",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "60px",
+            overflowY: "auto",
+          }}
+        >
+          <div style={{ maxWidth: "400px", width: "100%" }}>
+            <h2
+              style={{
+                color: "white",
+                fontSize: "32px",
+                fontWeight: "700",
+                marginBottom: "8px",
+              }}
+            >
               Create Account
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '32px', fontSize: '14px' }}>
-              Already have an account?{' '}
-              <Link href="/login" style={{ color: '#00d084', textDecoration: 'none', fontWeight: '500' }}>
+            <p
+              style={{
+                color: "rgba(255,255,255,0.5)",
+                marginBottom: "32px",
+                fontSize: "14px",
+              }}
+            >
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                style={{
+                  color: "#00d084",
+                  textDecoration: "none",
+                  fontWeight: "500",
+                }}
+              >
                 Login here
               </Link>
             </p>
 
             {error && (
-              <div style={{
-                background: 'rgba(255,71,87,0.1)', border: '1px solid #ff4757',
-                borderRadius: '8px', padding: '12px 16px',
-                color: '#ff4757', fontSize: '14px', marginBottom: '20px',
-              }}>
+              <div
+                style={{
+                  background: "rgba(255,71,87,0.1)",
+                  border: "1px solid #ff4757",
+                  borderRadius: "8px",
+                  padding: "12px 16px",
+                  color: "#ff4757",
+                  fontSize: "14px",
+                  marginBottom: "20px",
+                }}
+              >
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <form
+              onSubmit={handleSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                <label
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "14px",
+                    display: "block",
+                    marginBottom: "8px",
+                  }}
+                >
                   Full Name
                 </label>
                 <input
@@ -284,7 +368,14 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                <label
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "14px",
+                    display: "block",
+                    marginBottom: "8px",
+                  }}
+                >
                   Email Address
                 </label>
                 <input
@@ -298,40 +389,101 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                <label
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "14px",
+                    display: "block",
+                    marginBottom: "8px",
+                  }}
+                >
                   Password
                 </label>
-                <input
-                  className="input-field"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="input-field"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    style={{ paddingRight: "44px" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "rgba(255,255,255,0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      padding: 0,
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                <label
+                  style={{
+                    color: "rgba(255,255,255,0.7)",
+                    fontSize: "14px",
+                    display: "block",
+                    marginBottom: "8px",
+                  }}
+                >
                   Confirm Password
                 </label>
-                <input
-                  className="input-field"
-                  type="password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="input-field"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    style={{ paddingRight: "44px" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "rgba(255,255,255,0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      padding: 0,
+                    }}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
+                  </button>
+                </div>
               </div>
-
               <button
                 type="submit"
                 className="register-btn"
                 disabled={loading}
                 style={{ opacity: loading ? 0.7 : 1 }}
               >
-                {loading ? 'Creating account...' : 'Create Account '}
+                {loading ? "Creating account..." : "Create Account "}
               </button>
             </form>
           </div>
