@@ -57,12 +57,13 @@ export default function HomePage() {
         body { background: #071f2e; font-family: Inter, sans-serif; }
 
         header, nav {
-          background: transparent !important;
-          border-bottom: none !important;
-          box-shadow: none !important;
-          position: absolute !important;
-          top: 0; left: 0; right: 0;
-          z-index: 10;
+           background: rgba(7,31,46,0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(26,143,160,0.1) !important;
+  box-shadow: none !important;
+  position: absolute !important;
+  top: 0; left: 0; right: 0;
         }
 
         .hero {
