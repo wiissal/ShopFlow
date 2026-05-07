@@ -104,7 +104,7 @@ export default function HomePage() {
         .hero-content {
           position: relative;
           z-index: 2;
-          padding: 0 80px 120px;
+          padding: 0 80px 60px;
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
@@ -157,7 +157,7 @@ export default function HomePage() {
         .hero-product-badge.fading { opacity: 0; }
         .hero-price-tag {
           position: absolute;
-          bottom: 200px;
+          bottom: 140px;
           right: 80px;
           z-index: 2;
           transition: opacity 0.4s;
