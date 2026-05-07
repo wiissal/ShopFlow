@@ -44,7 +44,6 @@ export default function HomePage() {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0a0a16; font-family: Inter, sans-serif; }
 
-        /* Make navbar transparent so it blends with hero image */
         header, nav {
           background: transparent !important;
           border-bottom: none !important;
@@ -69,7 +68,7 @@ export default function HomePage() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 30%;
+          object-position: center center;
           transition: opacity 0.4s ease;
         }
         .hero-bg.fading { opacity: 0; }
@@ -399,14 +398,12 @@ export default function HomePage() {
       {/* ── HERO ── */}
       <section className="hero">
 
-        {/* headphones as base layer — no brightness filter for clarity */}
         <img
           src="/hero-headphones.jpg"
           alt="Hero Background"
           className="hero-bg"
         />
 
-        {/* product image slides on top when available */}
         {heroProduct?.image && (
           <img
             key={heroIndex}
@@ -525,7 +522,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── BANNER — iPhone ── */}
+      {/* ── BANNER ── */}
       <div className="banner">
         <img src="/hero-phone.jpg" alt="iPhone" className="banner-bg" />
         <div className="banner-overlay" />
