@@ -12,17 +12,28 @@ export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [fading, setFading] = useState(false);
 
-  useEffect(() => {
-    productsAPI.getAll({ limit: 8 }).then((res) => {
-      if (res.success) {
-        const all = res.data.products;
-        setProducts(all);
-        const withImages = all.filter((p) => p.image);
-        setFeaturedProducts(withImages.length > 0 ? withImages : all);
+ useEffect(() => {
+  productsAPI.getAll({ limit: 20 }).then((res) => {
+    if (res.success) {
+      const all = res.data.products;
+
+      // Pick 1 product per category, max 5
+      const seen = new Set();
+      const featured = [];
+      for (const p of all) {
+        if (!seen.has(p.category_name) && featured.length < 4 && p.category_name !== 'Gaming') {
+          seen.add(p.category_name);
+          featured.push(p);
+        }
       }
-      setLoading(false);
-    });
-  }, []);
+
+      setProducts(featured);
+      const withImages = featured.filter((p) => p.image);
+      setFeaturedProducts(withImages.length > 0 ? withImages : featured);
+    }
+    setLoading(false);
+  });
+}, []);
 
   useEffect(() => {
     if (featuredProducts.length < 2) return;
