@@ -445,6 +445,27 @@ export default function HomePage() {
   font-size: 16px;
   font-weight: 700;
 }
+  /* ── BENTO ANIMATIONS ── */
+.bento-card {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: bentofadeUp 0.5s ease forwards;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.bento-card:nth-child(1) { animation-delay: 0.05s; }
+.bento-card:nth-child(2) { animation-delay: 0.15s; }
+.bento-card:nth-child(3) { animation-delay: 0.25s; }
+.bento-card:nth-child(4) { animation-delay: 0.35s; }
+.bento-card:nth-child(5) { animation-delay: 0.45s; }
+@keyframes bentofadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+.bento-card:hover {
+  transform: perspective(800px) rotateX(-4deg) rotateY(4deg) scale(1.03) !important;
+  box-shadow: 0 24px 50px rgba(0,0,0,0.5) !important;
+  border-color: rgba(26,143,160,0.5) !important;
+}
       `}</style>
 
       <Navbar />
