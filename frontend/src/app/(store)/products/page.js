@@ -78,25 +78,7 @@ function ProductsContent() {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #071f2e; font-family: Inter, sans-serif; }
 
-        /* ── PAGE HEADER ── */
-      
-        .breadcrumb {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: rgba(255,255,255,0.35);
-          font-size: 13px;
-          margin-bottom: 16px;
-        }
-        .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-        .breadcrumb a:hover { color: #1a8fa0; }
-        .breadcrumb span { color: white; }
-        .page-title {
-          color: white;
-          font-size: 32px;
-          font-weight: 800;
-          letter-spacing: -1px;
-        }
+        
 
         /* ── FILTER BAR ── */
         .filter-bar {
@@ -109,7 +91,7 @@ function ProductsContent() {
           gap: 12px;
           height: 60px;
           position: sticky;
-          top: 148px;
+          top: 100px;
           z-index: 50;
           overflow-x: auto;
         }
