@@ -79,10 +79,7 @@ function ProductsContent() {
         body { background: #071f2e; font-family: Inter, sans-serif; }
 
         /* ── PAGE HEADER ── */
-        .page-header {
-          background: #071f2e;
-          padding: 32px 60px 0;
-        }
+      
         .breadcrumb {
           display: flex;
           align-items: center;
@@ -433,17 +430,7 @@ function ProductsContent() {
 
       <Navbar />
 
-      {/* ── PAGE HEADER ── */}
-      <div className="page-header">
-        <div className="breadcrumb">
-          <a href="/">Home</a>
-          <span>›</span>
-          <span>{selectedCategoryName === 'All' ? 'All Products' : selectedCategoryName}</span>
-        </div>
-        <h1 className="page-title">
-          {selectedCategoryName === 'All' ? 'All Products' : selectedCategoryName}
-        </h1>
-      </div>
+     
 
       {/* ── FILTER BAR ── */}
       <div className="filter-bar">
