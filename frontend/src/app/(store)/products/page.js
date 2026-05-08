@@ -1,18 +1,26 @@
-'use client';
+"use client";
 
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Navbar from '@/components/store/Navbar';
-import { productsAPI, categoriesAPI } from '@/lib/api';
-import { Search, ChevronLeft, ChevronRight, Grid, List, SlidersHorizontal, X } from 'lucide-react';
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import Navbar from "@/components/store/Navbar";
+import { productsAPI, categoriesAPI } from "@/lib/api";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Grid,
+  List,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 
 const CATEGORY_SLUGS = {
-  laptops: 'Laptops',
-  smartphones: 'Phones',
-  accessories: 'Accessories',
-  audio: 'Audio',
-  gaming: 'Gaming',
+  laptops: "Laptops",
+  smartphones: "Phones",
+  accessories: "Accessories",
+  audio: "Audio",
+  gaming: "Gaming",
 };
 
 function ProductsContent() {
@@ -21,24 +29,26 @@ function ProductsContent() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [selectedCategoryName, setSelectedCategoryName] = useState('All');
+  const [selectedCategoryName, setSelectedCategoryName] = useState("All");
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
-  const [viewMode, setViewMode] = useState('grid');
-  const [sortBy, setSortBy] = useState('latest');
+  const [viewMode, setViewMode] = useState("grid");
+  const [sortBy, setSortBy] = useState("latest");
 
   useEffect(() => {
-    const slug = searchParams.get('category');
+    const slug = searchParams.get("category");
     if (slug && categories.length > 0) {
       const slugName = CATEGORY_SLUGS[slug];
-      const match = categories.find(c => c.name.toLowerCase() === slugName?.toLowerCase());
+      const match = categories.find(
+        (c) => c.name.toLowerCase() === slugName?.toLowerCase(),
+      );
       setSelectedCategoryId(match ? String(match.id) : null);
-      setSelectedCategoryName(match ? match.name : 'All');
+      setSelectedCategoryName(match ? match.name : "All");
     } else {
       setSelectedCategoryId(null);
-      setSelectedCategoryName('All');
+      setSelectedCategoryName("All");
     }
   }, [searchParams, categories]);
 
@@ -68,7 +78,7 @@ function ProductsContent() {
   };
 
   const clearSearch = () => {
-    setSearch('');
+    setSearch("");
     setPage(1);
   };
 
@@ -78,7 +88,14 @@ function ProductsContent() {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #071f2e; font-family: Inter, sans-serif; }
 
-        
+        /* Hide category links in cat-bar on products page */
+.cat-bar a:nth-child(3),
+.cat-bar a:nth-child(4),
+.cat-bar a:nth-child(5),
+.cat-bar a:nth-child(6),
+.cat-bar a:nth-child(7) {
+  display: none;
+}
 
         /* ── FILTER BAR ── */
         .filter-bar {
@@ -412,8 +429,6 @@ function ProductsContent() {
 
       <Navbar />
 
-     
-
       {/* ── FILTER BAR ── */}
       <div className="filter-bar">
         <span className="filter-label">
@@ -423,16 +438,24 @@ function ProductsContent() {
 
         {/* Category chips */}
         <button
-          className={`cat-chip ${!selectedCategoryId ? 'active' : ''}`}
-          onClick={() => { setSelectedCategoryId(null); setSelectedCategoryName('All'); setPage(1); }}
+          className={`cat-chip ${!selectedCategoryId ? "active" : ""}`}
+          onClick={() => {
+            setSelectedCategoryId(null);
+            setSelectedCategoryName("All");
+            setPage(1);
+          }}
         >
           All
         </button>
         {categories.map((cat) => (
           <button
             key={cat.id}
-            className={`cat-chip ${selectedCategoryId === String(cat.id) ? 'active' : ''}`}
-            onClick={() => { setSelectedCategoryId(String(cat.id)); setSelectedCategoryName(cat.name); setPage(1); }}
+            className={`cat-chip ${selectedCategoryId === String(cat.id) ? "active" : ""}`}
+            onClick={() => {
+              setSelectedCategoryId(String(cat.id));
+              setSelectedCategoryName(cat.name);
+              setPage(1);
+            }}
           >
             {cat.name}
           </button>
@@ -443,12 +466,18 @@ function ProductsContent() {
         {/* Search */}
         <form onSubmit={handleSearch}>
           <div className="filter-search">
-            <Search size={14} style={{ color: 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
+            <Search
+              size={14}
+              style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0 }}
+            />
             <input
               type="text"
               placeholder="Search products..."
               value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
             />
             {search && (
               <button type="button" className="clear-btn" onClick={clearSearch}>
@@ -472,14 +501,14 @@ function ProductsContent() {
 
           <div className="view-toggle">
             <button
-              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
+              className={`view-btn ${viewMode === "grid" ? "active" : ""}`}
+              onClick={() => setViewMode("grid")}
             >
               <Grid size={14} />
             </button>
             <button
-              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
+              className={`view-btn ${viewMode === "list" ? "active" : ""}`}
+              onClick={() => setViewMode("list")}
             >
               <List size={14} />
             </button>
@@ -491,39 +520,79 @@ function ProductsContent() {
       <div className="main-content">
         <p className="results-info">
           Showing <span>{pagination?.total || 0} products</span>
-          {selectedCategoryName !== 'All' && <> in <span>{selectedCategoryName}</span></>}
-          {search && <> matching <span>"{search}"</span></>}
+          {selectedCategoryName !== "All" && (
+            <>
+              {" "}
+              in <span>{selectedCategoryName}</span>
+            </>
+          )}
+          {search && (
+            <>
+              {" "}
+              matching <span>"{search}"</span>
+            </>
+          )}
         </p>
 
         {/* GRID VIEW */}
-        {viewMode === 'grid' && (
+        {viewMode === "grid" && (
           <div className="products-grid">
             {loading ? (
-              Array.from({ length: 8 }).map((_, i) => <div key={i} className="skeleton" />)
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="skeleton" />
+              ))
             ) : products.length === 0 ? (
               <div className="empty-state">
                 <div className="empty-icon">📦</div>
                 <div className="empty-title">No products found</div>
-                <div className="empty-sub">Try adjusting your search or filters</div>
+                <div className="empty-sub">
+                  Try adjusting your search or filters
+                </div>
               </div>
             ) : (
               products.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`} className="product-card">
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  className="product-card"
+                >
                   <div className="product-img-wrap">
-                    {product.image
-                      ? <img src={product.image} alt={product.name} />
-                      : <span style={{ fontSize: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>📦</span>
-                    }
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} />
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: "48px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                        }}
+                      >
+                        📦
+                      </span>
+                    )}
                     <div className="cart-hover">View Product →</div>
-                    <span className={`stock-dot ${product.stock === 0 ? 'out-stock' : product.stock < 5 ? 'low-stock' : 'in-stock'}`}>
-                      {product.stock === 0 ? 'Out of Stock' : product.stock < 5 ? 'Low Stock' : 'In Stock'}
+                    <span
+                      className={`stock-dot ${product.stock === 0 ? "out-stock" : product.stock < 5 ? "low-stock" : "in-stock"}`}
+                    >
+                      {product.stock === 0
+                        ? "Out of Stock"
+                        : product.stock < 5
+                          ? "Low Stock"
+                          : "In Stock"}
                     </span>
                   </div>
                   <div className="product-info">
-                    <div className="product-cat">{product.category_name || 'Electronics'}</div>
+                    <div className="product-cat">
+                      {product.category_name || "Electronics"}
+                    </div>
                     <div className="product-name">{product.name}</div>
                     <div className="product-footer">
-                      <div className="product-price">${product.price}<span>USD</span></div>
+                      <div className="product-price">
+                        ${product.price}
+                        <span>USD</span>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -533,33 +602,65 @@ function ProductsContent() {
         )}
 
         {/* LIST VIEW */}
-        {viewMode === 'list' && (
+        {viewMode === "list" && (
           <div className="products-list">
             {loading ? (
-              Array.from({ length: 6 }).map((_, i) => <div key={i} className="skeleton-list" />)
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="skeleton-list" />
+              ))
             ) : products.length === 0 ? (
               <div className="empty-state">
                 <div className="empty-icon">📦</div>
                 <div className="empty-title">No products found</div>
-                <div className="empty-sub">Try adjusting your search or filters</div>
+                <div className="empty-sub">
+                  Try adjusting your search or filters
+                </div>
               </div>
             ) : (
               products.map((product) => (
-                <Link key={product.id} href={`/products/${product.id}`} className="product-list-card">
+                <Link
+                  key={product.id}
+                  href={`/products/${product.id}`}
+                  className="product-list-card"
+                >
                   <div className="list-img">
-                    {product.image
-                      ? <img src={product.image} alt={product.name} />
-                      : <span style={{ fontSize: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>📦</span>
-                    }
+                    {product.image ? (
+                      <img src={product.image} alt={product.name} />
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: "40px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: "100%",
+                        }}
+                      >
+                        📦
+                      </span>
+                    )}
                   </div>
                   <div className="list-info">
-                    <div className="product-cat">{product.category_name || 'Electronics'}</div>
+                    <div className="product-cat">
+                      {product.category_name || "Electronics"}
+                    </div>
                     <div className="list-name">{product.name}</div>
-                    <div className="list-desc">{product.description?.slice(0, 80)}...</div>
+                    <div className="list-desc">
+                      {product.description?.slice(0, 80)}...
+                    </div>
                     <div className="list-footer">
-                      <div className="list-price">${product.price}<span>USD</span></div>
-                      <span className={`stock-dot ${product.stock === 0 ? 'out-stock' : product.stock < 5 ? 'low-stock' : 'in-stock'}`}>
-                        {product.stock === 0 ? 'Out of Stock' : product.stock < 5 ? 'Low Stock' : 'In Stock'}
+                      <div className="list-price">
+                        ${product.price}
+                        <span>USD</span>
+                      </div>
+                      <span
+                        className={`stock-dot ${product.stock === 0 ? "out-stock" : product.stock < 5 ? "low-stock" : "in-stock"}`}
+                      >
+                        {product.stock === 0
+                          ? "Out of Stock"
+                          : product.stock < 5
+                            ? "Low Stock"
+                            : "In Stock"}
                       </span>
                       <span className="list-btn">View →</span>
                     </div>
@@ -573,19 +674,29 @@ function ProductsContent() {
         {/* PAGINATION */}
         {pagination && pagination.pages > 1 && (
           <div className="pagination">
-            <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>
+            <button
+              className="page-btn"
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page === 1}
+            >
               <ChevronLeft size={16} />
             </button>
-            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                className={`page-btn ${page === p ? 'active' : ''}`}
-                onClick={() => setPage(p)}
-              >
-                {p}
-              </button>
-            ))}
-            <button className="page-btn" onClick={() => setPage(p => p + 1)} disabled={page === pagination.pages}>
+            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map(
+              (p) => (
+                <button
+                  key={p}
+                  className={`page-btn ${page === p ? "active" : ""}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              ),
+            )}
+            <button
+              className="page-btn"
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page === pagination.pages}
+            >
               <ChevronRight size={16} />
             </button>
           </div>
@@ -601,7 +712,9 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div style={{ background: '#071f2e', minHeight: '100vh' }} />}>
+    <Suspense
+      fallback={<div style={{ background: "#071f2e", minHeight: "100vh" }} />}
+    >
       <ProductsContent />
     </Suspense>
   );
