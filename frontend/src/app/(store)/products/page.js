@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/store/Navbar';
 import { productsAPI, categoriesAPI } from '@/lib/api';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Grid, List, SlidersHorizontal, X } from 'lucide-react';
 
 const CATEGORY_SLUGS = {
   laptops: 'Laptops',
-  smartphones: 'Smartphones',
+  smartphones: 'Phones',
   accessories: 'Accessories',
   audio: 'Audio',
   gaming: 'Gaming',
@@ -17,42 +17,42 @@ const CATEGORY_SLUGS = {
 
 function ProductsContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState('All');
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
+  const [viewMode, setViewMode] = useState('grid');
+  const [sortBy, setSortBy] = useState('latest');
 
-  // Match URL slug to category id
   useEffect(() => {
     const slug = searchParams.get('category');
     if (slug && categories.length > 0) {
       const slugName = CATEGORY_SLUGS[slug];
-      const match = categories.find(
-        (c) => c.name.toLowerCase() === slugName?.toLowerCase()
-      );
+      const match = categories.find(c => c.name.toLowerCase() === slugName?.toLowerCase());
       setSelectedCategoryId(match ? String(match.id) : null);
+      setSelectedCategoryName(match ? match.name : 'All');
     } else {
       setSelectedCategoryId(null);
+      setSelectedCategoryName('All');
     }
   }, [searchParams, categories]);
 
-  // Load categories
   useEffect(() => {
     categoriesAPI.getAll().then((res) => {
       if (res.success) setCategories(res.data.categories);
     });
   }, []);
 
-  // Load products
   useEffect(() => {
     setLoading(true);
     const params = { page, limit: 12 };
     if (search) params.search = search;
     if (selectedCategoryId) params.category_id = selectedCategoryId;
-
     productsAPI.getAll(params).then((res) => {
       if (res.success) {
         setProducts(res.data.products);
@@ -67,236 +67,340 @@ function ProductsContent() {
     setPage(1);
   };
 
+  const clearSearch = () => {
+    setSearch('');
+    setPage(1);
+  };
+
   return (
     <>
       <style>{`
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a16; font-family: Inter, sans-serif; }
+        body { background: #071f2e; font-family: Inter, sans-serif; }
+
+        /* ── PAGE HEADER ── */
         .page-header {
-          background: linear-gradient(135deg, #0d0d1a 0%, #16213e 100%);
-          padding: 48px 80px;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          background: #071f2e;
+          padding: 32px 60px 0;
         }
-        .page-title {
-          color: white;
-          font-size: 36px;
-          font-weight: 800;
-          letter-spacing: -1px;
-          margin-bottom: 8px;
-        }
-        .page-subtitle {
-          color: rgba(255,255,255,0.4);
-          font-size: 15px;
-        }
-        .page-subtitle span { color: #00d084; font-weight: 600; }
-        .content {
-          display: grid;
-          grid-template-columns: 260px 1fr;
-          gap: 32px;
-          padding: 40px 80px;
-          min-height: 70vh;
-        }
-        .sidebar-section { margin-bottom: 32px; }
-        .sidebar-title {
-          color: rgba(255,255,255,0.4);
-          font-size: 11px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          margin-bottom: 12px;
-        }
-        .search-box {
+        .breadcrumb {
           display: flex;
           align-items: center;
-          gap: 10px;
-          background: #16213e;
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 12px;
-          padding: 10px 14px;
-          transition: all 0.3s;
+          gap: 8px;
+          color: rgba(255,255,255,0.35);
+          font-size: 13px;
+          margin-bottom: 16px;
         }
-        .search-box:focus-within {
-          border-color: #00d084;
-          box-shadow: 0 0 0 3px rgba(0,208,132,0.1);
+        .breadcrumb a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: #1a8fa0; }
+        .breadcrumb span { color: white; }
+        .page-title {
+          color: white;
+          font-size: 32px;
+          font-weight: 800;
+          letter-spacing: -1px;
         }
-        .search-box input {
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+          background: #0a2535;
+          border-top: 1px solid rgba(26,143,160,0.1);
+          border-bottom: 1px solid rgba(26,143,160,0.1);
+          padding: 0 60px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          height: 60px;
+          position: sticky;
+          top: 148px;
+          z-index: 50;
+          overflow-x: auto;
+        }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-label {
+          color: rgba(255,255,255,0.4);
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .filter-divider {
+          width: 1px; height: 20px;
+          background: rgba(26,143,160,0.2);
+          flex-shrink: 0;
+        }
+        .cat-chip {
+          padding: 6px 16px;
+          border-radius: 100px;
+          border: 1px solid rgba(26,143,160,0.2);
+          background: transparent;
+          color: rgba(255,255,255,0.6);
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          white-space: nowrap;
+          font-family: Inter, sans-serif;
+          flex-shrink: 0;
+        }
+        .cat-chip:hover { border-color: #1a8fa0; color: white; background: rgba(26,143,160,0.08); }
+        .cat-chip.active { background: #1a8fa0; border-color: #1a8fa0; color: #071f2e; font-weight: 700; }
+
+        /* search in filter bar */
+        .filter-search {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: #071f2e;
+          border: 1px solid rgba(26,143,160,0.2);
+          border-radius: 100px;
+          padding: 6px 14px;
+          transition: all 0.2s;
+          flex-shrink: 0;
+          min-width: 220px;
+        }
+        .filter-search:focus-within { border-color: #1a8fa0; box-shadow: 0 0 0 3px rgba(26,143,160,0.1); }
+        .filter-search input {
           background: transparent;
           border: none;
           outline: none;
           color: white;
-          font-size: 14px;
-          width: 100%;
+          font-size: 13px;
           font-family: Inter, sans-serif;
+          width: 100%;
         }
-        .search-box input::placeholder { color: rgba(255,255,255,0.25); }
-        .search-icon { color: rgba(255,255,255,0.3); flex-shrink: 0; }
-        .cat-list {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
+        .filter-search input::placeholder { color: rgba(255,255,255,0.25); }
+        .clear-btn {
+          background: none; border: none; cursor: pointer;
+          color: rgba(255,255,255,0.3); display: flex; padding: 0;
+          transition: color 0.2s;
         }
-        .cat-item {
+        .clear-btn:hover { color: #ff4757; }
+
+        /* right side of filter bar */
+        .filter-bar-right {
+          margin-left: auto;
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 10px 14px;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: all 0.2s;
-          border: 1px solid transparent;
-          color: rgba(255,255,255,0.6);
-          font-size: 14px;
-          font-weight: 500;
-          background: transparent;
-          text-align: left;
-          width: 100%;
-          font-family: Inter, sans-serif;
+          gap: 10px;
+          flex-shrink: 0;
         }
-        .cat-item:hover {
-          background: rgba(255,255,255,0.04);
-          color: white;
-        }
-        .cat-item.active {
-          background: rgba(0,208,132,0.08);
-          border-color: rgba(0,208,132,0.2);
-          color: #00d084;
-        }
-        .cat-count {
-          background: rgba(255,255,255,0.06);
-          color: rgba(255,255,255,0.3);
-          font-size: 11px;
-          padding: 2px 8px;
-          border-radius: 20px;
-        }
-        .cat-item.active .cat-count {
-          background: rgba(0,208,132,0.15);
-          color: #00d084;
-        }
-        .toolbar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 24px;
-        }
-        .results-count {
-          color: rgba(255,255,255,0.4);
-          font-size: 14px;
-        }
-        .results-count span { color: white; font-weight: 600; }
         .sort-select {
-          background: #16213e;
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 10px;
-          padding: 8px 14px;
+          background: #071f2e;
+          border: 1px solid rgba(26,143,160,0.2);
+          border-radius: 100px;
+          padding: 6px 14px;
           color: rgba(255,255,255,0.7);
           font-size: 13px;
           outline: none;
           cursor: pointer;
           font-family: Inter, sans-serif;
+          transition: border-color 0.2s;
         }
+        .sort-select:focus { border-color: #1a8fa0; }
+        .view-toggle {
+          display: flex;
+          gap: 4px;
+          background: #071f2e;
+          border: 1px solid rgba(26,143,160,0.2);
+          border-radius: 8px;
+          padding: 4px;
+        }
+        .view-btn {
+          width: 28px; height: 28px;
+          border: none; background: transparent;
+          color: rgba(255,255,255,0.4);
+          cursor: pointer; border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+          transition: all 0.2s;
+        }
+        .view-btn.active { background: #1a8fa0; color: #071f2e; }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+          padding: 32px 60px 60px;
+          min-height: 70vh;
+        }
+        .results-info {
+          color: rgba(255,255,255,0.35);
+          font-size: 13px;
+          margin-bottom: 24px;
+        }
+        .results-info span { color: #1a8fa0; font-weight: 600; }
+
+        /* ── GRID VIEW ── */
         .products-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(4, 1fr);
           gap: 20px;
-          margin-bottom: 40px;
+          margin-bottom: 48px;
         }
         .product-card {
-          background: #111827;
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 18px;
+          background: #0a2535;
+          border: 1px solid rgba(26,143,160,0.08);
+          border-radius: 16px;
           overflow: hidden;
-          transition: all 0.35s ease;
           text-decoration: none;
           display: block;
+          transition: all 0.3s ease;
+          position: relative;
         }
         .product-card:hover {
-          transform: translateY(-6px);
-          border-color: rgba(0,208,132,0.25);
-          box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+          border-color: rgba(26,143,160,0.4);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+          transform: translateY(-4px);
         }
-        .product-img {
+        .product-img-wrap {
           width: 100%;
-          height: 190px;
-          background: #16213e;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 56px;
+          height: 220px;
+          background: #0e3a4a;
           overflow: hidden;
+          position: relative;
         }
-        .product-img img {
-          width: 100%;
-          height: 100%;
+        .product-img-wrap img {
+          width: 100%; height: 100%;
           object-fit: cover;
-          transition: transform 0.4s;
+          transition: transform 0.4s ease;
         }
-        .product-card:hover .product-img img { transform: scale(1.06); }
+        .product-card:hover .product-img-wrap img { transform: scale(1.08); }
+        .cart-hover {
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          background: #1a8fa0;
+          color: #071f2e;
+          padding: 12px;
+          text-align: center;
+          font-size: 13px;
+          font-weight: 700;
+          transform: translateY(100%);
+          transition: transform 0.3s ease;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+        }
+        .product-card:hover .cart-hover { transform: translateY(0); }
+        .stock-dot {
+          position: absolute;
+          top: 12px; right: 12px;
+          padding: 4px 10px;
+          border-radius: 100px;
+          font-size: 11px;
+          font-weight: 600;
+        }
+        .in-stock { background: rgba(26,143,160,0.15); color: #1a8fa0; }
+        .low-stock { background: rgba(246,201,14,0.15); color: #f6c90e; }
+        .out-stock { background: rgba(255,71,87,0.15); color: #ff4757; }
         .product-info { padding: 16px; }
         .product-cat {
-          color: #00d084;
-          font-size: 11px;
+          color: #1a8fa0;
+          font-size: 10px;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.8px;
+          letter-spacing: 1px;
           margin-bottom: 6px;
         }
         .product-name {
           color: white;
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 600;
           margin-bottom: 12px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          line-height: 1.4;
         }
         .product-footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-        .product-price {
-          color: white;
-          font-size: 20px;
-          font-weight: 800;
+        .product-price { color: white; font-size: 18px; font-weight: 800; }
+        .product-price span { color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 400; margin-left: 2px; }
+
+        /* ── LIST VIEW ── */
+        .products-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 48px;
         }
-        .product-price span {
-          color: rgba(255,255,255,0.3);
-          font-size: 12px;
-          font-weight: 400;
-          margin-left: 2px;
+        .product-list-card {
+          background: #0a2535;
+          border: 1px solid rgba(26,143,160,0.08);
+          border-radius: 16px;
+          overflow: hidden;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          transition: all 0.3s ease;
         }
-        .stock-badge {
-          font-size: 12px;
-          padding: 3px 10px;
-          border-radius: 20px;
-          font-weight: 500;
+        .product-list-card:hover {
+          border-color: rgba(26,143,160,0.4);
+          box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+          transform: translateX(4px);
         }
-        .in-stock { background: rgba(0,208,132,0.1); color: #00d084; }
-        .low-stock { background: rgba(246,201,14,0.1); color: #f6c90e; }
-        .out-stock { background: rgba(255,71,87,0.1); color: #ff4757; }
-        .empty-state {
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 80px 20px;
+        .list-img {
+          width: 140px; height: 110px;
+          flex-shrink: 0;
+          overflow: hidden;
+          background: #0e3a4a;
         }
-        .empty-icon { font-size: 56px; margin-bottom: 16px; }
-        .empty-text { font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.5); }
+        .list-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .product-list-card:hover .list-img img { transform: scale(1.05); }
+        .list-info { padding: 20px 24px; flex: 1; }
+        .list-name { color: white; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .list-desc { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.5; margin-bottom: 12px; }
+        .list-footer { display: flex; align-items: center; gap: 16px; }
+        .list-price { color: white; font-size: 22px; font-weight: 800; }
+        .list-price span { color: rgba(255,255,255,0.3); font-size: 12px; margin-left: 2px; }
+        .list-btn {
+          background: #1a8fa0;
+          color: #071f2e;
+          padding: 8px 20px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        /* ── SKELETON ── */
         .skeleton {
-          background: #16213e;
-          border-radius: 18px;
-          height: 280px;
+          background: #0a2535;
+          border-radius: 16px;
+          height: 300px;
+          animation: shimmer 1.5s ease infinite;
+        }
+        .skeleton-list {
+          background: #0a2535;
+          border-radius: 16px;
+          height: 110px;
           animation: shimmer 1.5s ease infinite;
         }
         @keyframes shimmer {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          50% { opacity: 0.4; }
         }
+
+        /* ── EMPTY ── */
+        .empty-state {
+          text-align: center;
+          padding: 80px 20px;
+          grid-column: 1 / -1;
+        }
+        .empty-icon { font-size: 64px; margin-bottom: 16px; }
+        .empty-title { color: white; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .empty-sub { color: rgba(255,255,255,0.35); font-size: 14px; }
+
+        /* ── PAGINATION ── */
         .pagination {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          padding: 20px 0;
+          gap: 6px;
         }
         .page-btn {
           display: flex;
@@ -304,7 +408,7 @@ function ProductsContent() {
           justify-content: center;
           width: 38px; height: 38px;
           border-radius: 10px;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid rgba(26,143,160,0.2);
           background: transparent;
           color: rgba(255,255,255,0.6);
           cursor: pointer;
@@ -312,18 +416,15 @@ function ProductsContent() {
           font-family: Inter, sans-serif;
           font-size: 14px;
         }
-        .page-btn:hover { border-color: #00d084; color: #00d084; }
-        .page-btn.active {
-          background: #00d084;
-          border-color: #00d084;
-          color: #0a0a16;
-          font-weight: 700;
-        }
+        .page-btn:hover { border-color: #1a8fa0; color: #1a8fa0; }
+        .page-btn.active { background: #1a8fa0; border-color: #1a8fa0; color: #071f2e; font-weight: 700; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* ── FOOTER ── */
         .footer {
-          background: #0d0d1a;
-          border-top: 1px solid rgba(255,255,255,0.05);
-          padding: 30px 80px;
+          background: #0a2535;
+          border-top: 1px solid rgba(26,143,160,0.1);
+          padding: 30px 60px;
           text-align: center;
           color: rgba(255,255,255,0.3);
           font-size: 14px;
@@ -332,137 +433,198 @@ function ProductsContent() {
 
       <Navbar />
 
+      {/* ── PAGE HEADER ── */}
       <div className="page-header">
+        <div className="breadcrumb">
+          <a href="/">Home</a>
+          <span>›</span>
+          <span>{selectedCategoryName === 'All' ? 'All Products' : selectedCategoryName}</span>
+        </div>
         <h1 className="page-title">
-          {searchParams.get('category')
-            ? CATEGORY_SLUGS[searchParams.get('category')] || 'Products'
-            : 'All Products'}
+          {selectedCategoryName === 'All' ? 'All Products' : selectedCategoryName}
         </h1>
-        <p className="page-subtitle">
-          Showing <span>{pagination?.total || 0} products</span> in our store
-        </p>
       </div>
 
-      <div className="content">
-        <aside className="sidebar">
-          <div className="sidebar-section">
-            <div className="sidebar-title">Search</div>
-            <form onSubmit={handleSearch}>
-              <div className="search-box">
-                <Search size={15} className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={search}
-                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                />
-              </div>
-            </form>
-          </div>
+      {/* ── FILTER BAR ── */}
+      <div className="filter-bar">
+        <span className="filter-label">
+          <SlidersHorizontal size={14} /> Filters
+        </span>
+        <div className="filter-divider" />
 
-          <div className="sidebar-section">
-            <div className="sidebar-title">Categories</div>
-            <div className="cat-list">
-              <button
-                className={`cat-item ${!selectedCategoryId ? 'active' : ''}`}
-                onClick={() => { setSelectedCategoryId(null); setPage(1); }}
-              >
-                All Products
-                <span className="cat-count">{pagination?.total || 0}</span>
+        {/* Category chips */}
+        <button
+          className={`cat-chip ${!selectedCategoryId ? 'active' : ''}`}
+          onClick={() => { setSelectedCategoryId(null); setSelectedCategoryName('All'); setPage(1); }}
+        >
+          All
+        </button>
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            className={`cat-chip ${selectedCategoryId === String(cat.id) ? 'active' : ''}`}
+            onClick={() => { setSelectedCategoryId(String(cat.id)); setSelectedCategoryName(cat.name); setPage(1); }}
+          >
+            {cat.name}
+          </button>
+        ))}
+
+        <div className="filter-divider" />
+
+        {/* Search */}
+        <form onSubmit={handleSearch}>
+          <div className="filter-search">
+            <Search size={14} style={{ color: 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            />
+            {search && (
+              <button type="button" className="clear-btn" onClick={clearSearch}>
+                <X size={13} />
               </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  className={`cat-item ${selectedCategoryId === String(cat.id) ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategoryId(String(cat.id)); setPage(1); }}
-                >
-                  {cat.name}
-                  <span className="cat-count">0</span>
-                </button>
-              ))}
-            </div>
+            )}
           </div>
-        </aside>
+        </form>
 
-        <main>
-          <div className="toolbar">
-            <p className="results-count">
-              <span>{pagination?.total || 0}</span> products found
-            </p>
-            <select className="sort-select">
-              <option>Latest</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-            </select>
+        {/* Right side */}
+        <div className="filter-bar-right">
+          <select
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="latest">Latest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+          </select>
+
+          <div className="view-toggle">
+            <button
+              className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+            >
+              <Grid size={14} />
+            </button>
+            <button
+              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+            >
+              <List size={14} />
+            </button>
           </div>
+        </div>
+      </div>
 
+      {/* ── MAIN CONTENT ── */}
+      <div className="main-content">
+        <p className="results-info">
+          Showing <span>{pagination?.total || 0} products</span>
+          {selectedCategoryName !== 'All' && <> in <span>{selectedCategoryName}</span></>}
+          {search && <> matching <span>"{search}"</span></>}
+        </p>
+
+        {/* GRID VIEW */}
+        {viewMode === 'grid' && (
           <div className="products-grid">
             {loading ? (
-              Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="skeleton" />
-              ))
+              Array.from({ length: 8 }).map((_, i) => <div key={i} className="skeleton" />)
             ) : products.length === 0 ? (
               <div className="empty-state">
                 <div className="empty-icon">📦</div>
-                <div className="empty-text">No products found</div>
+                <div className="empty-title">No products found</div>
+                <div className="empty-sub">Try adjusting your search or filters</div>
               </div>
             ) : (
               products.map((product) => (
                 <Link key={product.id} href={`/products/${product.id}`} className="product-card">
-                  <div className="product-img">
-                    {product.image ? (
-                      <img src={product.image} alt={product.name} />
-                    ) : '📦'}
+                  <div className="product-img-wrap">
+                    {product.image
+                      ? <img src={product.image} alt={product.name} />
+                      : <span style={{ fontSize: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>📦</span>
+                    }
+                    <div className="cart-hover">View Product →</div>
+                    <span className={`stock-dot ${product.stock === 0 ? 'out-stock' : product.stock < 5 ? 'low-stock' : 'in-stock'}`}>
+                      {product.stock === 0 ? 'Out of Stock' : product.stock < 5 ? 'Low Stock' : 'In Stock'}
+                    </span>
                   </div>
                   <div className="product-info">
                     <div className="product-cat">{product.category_name || 'Electronics'}</div>
                     <div className="product-name">{product.name}</div>
                     <div className="product-footer">
-                      <div className="product-price">
-                        ${product.price}<span>USD</span>
-                      </div>
-                      <span className={`stock-badge ${product.stock === 0 ? 'out-stock' : product.stock < 5 ? 'low-stock' : 'in-stock'}`}>
-                        {product.stock === 0 ? 'Out of Stock' : product.stock < 5 ? 'Low Stock' : 'In Stock'}
-                      </span>
+                      <div className="product-price">${product.price}<span>USD</span></div>
                     </div>
                   </div>
                 </Link>
               ))
             )}
           </div>
+        )}
 
-          {pagination && pagination.pages > 1 && (
-            <div className="pagination">
+        {/* LIST VIEW */}
+        {viewMode === 'list' && (
+          <div className="products-list">
+            {loading ? (
+              Array.from({ length: 6 }).map((_, i) => <div key={i} className="skeleton-list" />)
+            ) : products.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">📦</div>
+                <div className="empty-title">No products found</div>
+                <div className="empty-sub">Try adjusting your search or filters</div>
+              </div>
+            ) : (
+              products.map((product) => (
+                <Link key={product.id} href={`/products/${product.id}`} className="product-list-card">
+                  <div className="list-img">
+                    {product.image
+                      ? <img src={product.image} alt={product.name} />
+                      : <span style={{ fontSize: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>📦</span>
+                    }
+                  </div>
+                  <div className="list-info">
+                    <div className="product-cat">{product.category_name || 'Electronics'}</div>
+                    <div className="list-name">{product.name}</div>
+                    <div className="list-desc">{product.description?.slice(0, 80)}...</div>
+                    <div className="list-footer">
+                      <div className="list-price">${product.price}<span>USD</span></div>
+                      <span className={`stock-dot ${product.stock === 0 ? 'out-stock' : product.stock < 5 ? 'low-stock' : 'in-stock'}`}>
+                        {product.stock === 0 ? 'Out of Stock' : product.stock < 5 ? 'Low Stock' : 'In Stock'}
+                      </span>
+                      <span className="list-btn">View →</span>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* PAGINATION */}
+        {pagination && pagination.pages > 1 && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setPage(p => p - 1)} disabled={page === 1}>
+              <ChevronLeft size={16} />
+            </button>
+            {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
               <button
-                className="page-btn"
-                onClick={() => setPage(p => p - 1)}
-                disabled={page === 1}
+                key={p}
+                className={`page-btn ${page === p ? 'active' : ''}`}
+                onClick={() => setPage(p)}
               >
-                <ChevronLeft size={16} />
+                {p}
               </button>
-              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  className={`page-btn ${page === p ? 'active' : ''}`}
-                  onClick={() => setPage(p)}
-                >
-                  {p}
-                </button>
-              ))}
-              <button
-                className="page-btn"
-                onClick={() => setPage(p => p + 1)}
-                disabled={page === pagination.pages}
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          )}
-        </main>
+            ))}
+            <button className="page-btn" onClick={() => setPage(p => p + 1)} disabled={page === pagination.pages}>
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
       </div>
 
       <footer className="footer">
-        © 2026 ShopFlow. Built with passion  in Morocco 🇲🇦
+        © 2026 ShopFlow. Built with passion in Morocco 🇲🇦
       </footer>
     </>
   );
@@ -470,7 +632,7 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div style={{ background: '#0a0a16', minHeight: '100vh' }} />}>
+    <Suspense fallback={<div style={{ background: '#071f2e', minHeight: '100vh' }} />}>
       <ProductsContent />
     </Suspense>
   );
