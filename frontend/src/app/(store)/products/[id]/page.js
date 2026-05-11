@@ -1,12 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Navbar from '@/components/store/Navbar';
-import { productsAPI } from '@/lib/api';
-import { useCart } from '@/context/CartContext';
-import { ShoppingCart, ArrowLeft, Package, Shield, Truck, RotateCcw } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import Navbar from "@/components/store/Navbar";
+import { productsAPI } from "@/lib/api";
+import { useCart } from "@/context/CartContext";
+import {
+  ShoppingCart,
+  ArrowLeft,
+  Package,
+  Shield,
+  Truck,
+  RotateCcw,
+} from "lucide-react";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -24,11 +31,17 @@ export default function ProductDetailPage() {
       if (res.success) {
         setProduct(res.data.product);
         // fetch related by same category
-        productsAPI.getAll({ limit: 4, category_id: res.data.product.category_id }).then((r) => {
-          if (r.success) {
-            setRelated(r.data.products.filter((p) => p.id !== res.data.product.id).slice(0, 4));
-          }
-        });
+        productsAPI
+          .getAll({ limit: 4, category_id: res.data.product.category_id })
+          .then((r) => {
+            if (r.success) {
+              setRelated(
+                r.data.products
+                  .filter((p) => p.id !== res.data.product.id)
+                  .slice(0, 4),
+              );
+            }
+          });
       }
       setLoading(false);
     });
@@ -41,7 +54,8 @@ export default function ProductDetailPage() {
     setTimeout(() => setAdded(false), 2000);
   };
 
-  const stockStatus = product?.stock === 0 ? 'out' : product?.stock < 5 ? 'low' : 'in';
+  const stockStatus =
+    product?.stock === 0 ? "out" : product?.stock < 5 ? "low" : "in";
 
   return (
     <>
@@ -66,20 +80,19 @@ export default function ProductDetailPage() {
           grid-template-columns: 1fr 1fr;
           gap: 60px;
           margin-bottom: 80px;
-          align-items: start;
-        }
-
+          align-items: center
+          }
         /* image side */
         .product-image-wrap {
-          border-radius: 24px;
-          overflow: hidden;
-          background: #0a2535;
-          border: 1px solid rgba(26,143,160,0.15);
-          aspect-ratio: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #0a2535;
+  border: 1px solid rgba(26,143,160,0.15);
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
         }
         .product-image-wrap img {
           width: 100%; height: 100%;
@@ -286,23 +299,57 @@ export default function ProductDetailPage() {
 
       {loading ? (
         <div className="skeleton-page">
-          <div className="skeleton-box" style={{ height: '32px', width: '200px', marginBottom: '32px' }} />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px' }}>
-            <div className="skeleton-box" style={{ height: '500px' }} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div className="skeleton-box" style={{ height: '24px', width: '120px' }} />
-              <div className="skeleton-box" style={{ height: '48px' }} />
-              <div className="skeleton-box" style={{ height: '56px', width: '160px' }} />
-              <div className="skeleton-box" style={{ height: '100px' }} />
-              <div className="skeleton-box" style={{ height: '56px' }} />
+          <div
+            className="skeleton-box"
+            style={{ height: "32px", width: "200px", marginBottom: "32px" }}
+          />
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "60px",
+            }}
+          >
+            <div className="skeleton-box" style={{ height: "500px" }} />
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            >
+              <div
+                className="skeleton-box"
+                style={{ height: "24px", width: "120px" }}
+              />
+              <div className="skeleton-box" style={{ height: "48px" }} />
+              <div
+                className="skeleton-box"
+                style={{ height: "56px", width: "160px" }}
+              />
+              <div className="skeleton-box" style={{ height: "100px" }} />
+              <div className="skeleton-box" style={{ height: "56px" }} />
             </div>
           </div>
         </div>
       ) : !product ? (
-        <div style={{ textAlign: 'center', padding: '120px 60px', color: 'rgba(255,255,255,0.4)' }}>
-          <div style={{ fontSize: '64px', marginBottom: '16px' }}>📦</div>
-          <div style={{ fontSize: '20px', color: 'white', fontWeight: '700', marginBottom: '8px' }}>Product not found</div>
-          <Link href="/products" style={{ color: '#1a8fa0' }}>← Back to products</Link>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "120px 60px",
+            color: "rgba(255,255,255,0.4)",
+          }}
+        >
+          <div style={{ fontSize: "64px", marginBottom: "16px" }}>📦</div>
+          <div
+            style={{
+              fontSize: "20px",
+              color: "white",
+              fontWeight: "700",
+              marginBottom: "8px",
+            }}
+          >
+            Product not found
+          </div>
+          <Link href="/products" style={{ color: "#1a8fa0" }}>
+            ← Back to products
+          </Link>
         </div>
       ) : (
         <div className="page">
@@ -310,7 +357,16 @@ export default function ProductDetailPage() {
           <div className="breadcrumb">
             <a href="/">Home</a> <span>›</span>
             <a href="/products">Products</a> <span>›</span>
-            {product.category_name && <><a href={`/products?category=${product.category_name.toLowerCase()}`}>{product.category_name}</a> <span>›</span></>}
+            {product.category_name && (
+              <>
+                <a
+                  href={`/products?category=${product.category_name.toLowerCase()}`}
+                >
+                  {product.category_name}
+                </a>{" "}
+                <span>›</span>
+              </>
+            )}
             <span>{product.name}</span>
           </div>
 
@@ -318,15 +374,18 @@ export default function ProductDetailPage() {
           <div className="product-main">
             {/* image */}
             <div className="product-image-wrap">
-              {product.image
-                ? <img src={product.image} alt={product.name} />
-                : <div className="no-img">📦</div>
-              }
+              {product.image ? (
+                <img src={product.image} alt={product.name} />
+              ) : (
+                <div className="no-img">📦</div>
+              )}
             </div>
 
             {/* info */}
             <div className="product-info">
-              <div className="product-cat">{product.category_name || 'Electronics'}</div>
+              <div className="product-cat">
+                {product.category_name || "Electronics"}
+              </div>
               <h1 className="product-name">{product.name}</h1>
 
               <div className="product-price-row">
@@ -335,9 +394,15 @@ export default function ProductDetailPage() {
               </div>
 
               <div>
-                <span className={`stock-badge ${stockStatus === 'out' ? 'out-stock' : stockStatus === 'low' ? 'low-stock' : 'in-stock'}`}>
+                <span
+                  className={`stock-badge ${stockStatus === "out" ? "out-stock" : stockStatus === "low" ? "low-stock" : "in-stock"}`}
+                >
                   <span className="dot" />
-                  {stockStatus === 'out' ? 'Out of Stock' : stockStatus === 'low' ? `Only ${product.stock} left` : 'In Stock'}
+                  {stockStatus === "out"
+                    ? "Out of Stock"
+                    : stockStatus === "low"
+                      ? `Only ${product.stock} left`
+                      : "In Stock"}
                 </span>
               </div>
 
@@ -352,22 +417,46 @@ export default function ProductDetailPage() {
                 <div>
                   <div className="qty-label">Quantity</div>
                   <div className="qty-wrap">
-                    <button className="qty-btn" onClick={() => setQuantity(q => Math.max(1, q - 1))} disabled={quantity <= 1}>−</button>
+                    <button
+                      className="qty-btn"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      disabled={quantity <= 1}
+                    >
+                      −
+                    </button>
                     <div className="qty-num">{quantity}</div>
-                    <button className="qty-btn" onClick={() => setQuantity(q => Math.min(product.stock, q + 1))} disabled={quantity >= product.stock}>+</button>
+                    <button
+                      className="qty-btn"
+                      onClick={() =>
+                        setQuantity((q) => Math.min(product.stock, q + 1))
+                      }
+                      disabled={quantity >= product.stock}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
               )}
 
               {/* buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
                 <button
-                  className={`add-btn ${added ? 'added' : ''}`}
+                  className={`add-btn ${added ? "added" : ""}`}
                   onClick={handleAddToCart}
                   disabled={product.stock === 0}
                 >
                   <ShoppingCart size={20} />
-                  {added ? '✓ Added to Cart!' : product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                  {added
+                    ? "✓ Added to Cart!"
+                    : product.stock === 0
+                      ? "Out of Stock"
+                      : "Add to Cart"}
                 </button>
                 <Link href="/cart" className="view-cart-btn">
                   View Cart
@@ -402,9 +491,27 @@ export default function ProductDetailPage() {
               <div className="related-sub">You might also like these</div>
               <div className="related-grid">
                 {related.map((p) => (
-                  <Link key={p.id} href={`/products/${p.id}`} className="related-card">
+                  <Link
+                    key={p.id}
+                    href={`/products/${p.id}`}
+                    className="related-card"
+                  >
                     <div className="related-img">
-                      {p.image ? <img src={p.image} alt={p.name} /> : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '40px' }}>📦</span>}
+                      {p.image ? (
+                        <img src={p.image} alt={p.name} />
+                      ) : (
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: "100%",
+                            fontSize: "40px",
+                          }}
+                        >
+                          📦
+                        </span>
+                      )}
                     </div>
                     <div className="related-info">
                       <div className="product-cat">{p.category_name}</div>
