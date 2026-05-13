@@ -276,7 +276,7 @@ export default function CartPage() {
       <Navbar />
 
       {items.length === 0 ? (
-        <div className="empty">
+        <div className= "empty" style={{ minHeight: 'calc(100vh - 200px)' }}>
           <div className="empty-icon"><ShoppingBag size={32} /></div>
           <div className="empty-title">Your cart is empty</div>
           <div className="empty-sub">Looks like you haven't added anything yet</div>
