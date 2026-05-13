@@ -55,12 +55,27 @@ const Order = {
     return {...order.rows[0], items: items.rows}
   },
     async findByUser(user_id) {
-    const result = await pool.query(
-      'SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC',
-      [user_id]
-    );
-    return result.rows;
-  },
+  const orders = await pool.query(
+    'SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC',
+    [user_id]
+  );
+
+  // fetch items for each order
+  const ordersWithItems = await Promise.all(
+    orders.rows.map(async (order) => {
+      const items = await pool.query(
+        `SELECT oi.*, p.name as product_name, p.image
+         FROM order_items oi
+         LEFT JOIN products p ON oi.product_id = p.id
+         WHERE oi.order_id = $1`,
+        [order.id]
+      );
+      return { ...order, items: items.rows };
+    })
+  );
+
+  return ordersWithItems;
+},
 
   async findAll({ status, limit = 10, offset = 0} = {}) {
     let query = `
