@@ -397,8 +397,16 @@ export default function CartPage() {
       )}
 
       <footer className="footer">
-        © 2026 ShopFlow. Built with passion in Morocco 🇲🇦
-      </footer>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1400px', margin: '0 auto' }}>
+    <span>© 2026 ShopFlow. All rights reserved.</span>
+    <div style={{ display: 'flex', gap: '24px' }}>
+      <a href="/products" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none', fontSize: '13px' }}>Products</a>
+      <a href="/orders" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none', fontSize: '13px' }}>Orders</a>
+      <a href="/cart" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none', fontSize: '13px' }}>Cart</a>
+    </div>
+    <span>Built with passion in Morocco 🇲🇦</span>
+  </div>
+</footer>
     </>
   );
 }
