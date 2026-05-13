@@ -45,7 +45,7 @@ export default function CartPage() {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #071f2e; font-family: Inter, sans-serif; }
 
-        .page { padding: 32px 60px 80px; max-width: 1400px; margin: 0 auto; }
+        .page { padding: 10px 60px 80px; max-width: 1400px; margin: 0 auto; }
 
         .page-title {
           color: white; font-size: 28px; font-weight: 800;
