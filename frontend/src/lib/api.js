@@ -48,7 +48,7 @@ export const productsAPI = {
   },
  
   getOne: (id) => fetchAPI(`/products/${id}`),
-  getById: (id) =>
+ getById: (id) =>
     fetch(`${API_URL}/products/${id}`, {
       headers: headers(),
     }).then((r) => r.json()),
