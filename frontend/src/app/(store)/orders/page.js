@@ -415,7 +415,7 @@ export default function OrdersPage() {
                           {order.items?.slice(0, 2).map((i) => i.product_name || i.name).join(", ")}
                           {order.items?.length > 2 ? "..." : ""}
                         </div>
-                        <div className="preview-hint">Click to see details ↓</div>
+                        <div className="preview-hint">Click to see details </div>
                       </div>
                     </div>
                   )}
@@ -454,7 +454,7 @@ export default function OrdersPage() {
                           disabled={cancelling === order.id}
                           onClick={() => handleCancel(order.id)}
                         >
-                          <X size={12} />
+                          
                           {cancelling === order.id ? "Cancelling..." : "Cancel Order"}
                         </button>
                       )}
